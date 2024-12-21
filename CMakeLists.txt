@@ -20,14 +20,14 @@ set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp")
 
 # 添加可执行文件
-add_executable(MyExecutable ${SOURCES})
+add_executable(test_serial ${SOURCES})
 
 # # 指定外部库路径
 # set(EXTERNAL_LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
 # set(EXTERNAL_LIBS "${EXTERNAL_LIBS_DIR}/external_lib.so")
 
 # # 链接外部库
-# target_link_libraries(MyExecutable PRIVATE ${EXTERNAL_LIBS})
+# target_link_libraries(test_serial PRIVATE ${EXTERNAL_LIBS})
 
 # # 包含头文件路径
-# target_include_directories(MyExecutable PRIVATE ${SRC_DIR})
+# target_include_directories(test_serial PRIVATE ${SRC_DIR})
