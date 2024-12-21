@@ -1,0 +1,130 @@
+/* =============================================================================
+#     FileName: rua_factory.h
+#         Desc: none
+#       Author: lijie
+#        Email: lijie@roborock.com
+#     HomePage: https://www.roborock.com
+#      Version: 0.0.1
+#   LastChange: 2022-06-15 12:01:04
+#      History: none
+============================================================================= */
+#ifndef __RUA_FACTORY_H__
+#define __RUA_FACTORY_H__
+
+#include "rda_headers.h"
+
+#if defined(UART_API_BUILD_TYPE_VENDOR)
+
+#define FACTORY_TEST_VERSION
+
+#define CLIP_OUT_DO_MODEL
+#define CLIP_OUT_DO_MI_MODEL
+#define CLIP_OUT_DO_MI_MODEL_SET
+#define CLIP_OUT_DO_RR_MODEL
+#define CLIP_OUT_DO_CONFIG
+#define CLIP_OUT_DO_LANGUAGE
+#define CLIP_OUT_DO_DELLDSCACHE
+#define CLIP_OUT_DO_DELMOTORLOG
+#define CLIP_OUT_DO_KILL6
+#define CLIP_OUT_DO_PS
+#define CLIP_OUT_DO_TOP
+#define CLIP_OUT_DO_DF
+#define CLIP_OUT_DO_FREE
+#define CLIP_OUT_DO_REMOVE
+#define CLIP_OUT_DO_LIST
+#define CLIP_OUT_DO_WRITEDEFAULT
+#define CLIP_OUT_DO_WRITEOVER
+#define CLIP_OUT_DO_APNORMAL
+#define CLIP_OUT_DO_RTC
+#define CLIP_OUT_DO_MODEL
+#define CLIP_OUT_DO_MI_MODEL
+#define CLIP_OUT_DO_RR_MODEL
+#define CLIP_OUT_DO_CONFIG
+#define CLIP_OUT_DO_LANGUAGE
+#define CLIP_OUT_DO_DELLDSCACHE
+#define CLIP_OUT_DO_DELMOTORLOG
+#define CLIP_OUT_DO_KILL6
+#define CLIP_OUT_DO_PS
+#define CLIP_OUT_DO_TOP
+#define CLIP_OUT_DO_DF
+#define CLIP_OUT_DO_FREE
+#define CLIP_OUT_DO_REMOVE
+#define CLIP_OUT_DO_LIST
+#define CLIP_OUT_DO_WRITEDEFAULT
+#define CLIP_OUT_DO_APNORMAL
+#define CLIP_OUT_DO_BOARDANGLE
+#define CLIP_OUT_DO_SHUTDOWN
+#define CLIP_OUT_DO_PWRSOC
+#define CLIP_OUT_DO_COMPASS
+#define CLIP_OUT_DO_SWD
+#define CLIP_OUT_DO_APCHIPID
+#define CLIP_OUT_DO_WIFI
+#define CLIP_OUT_DO_BLE
+#define CLIP_OUT_DO_OS_VERSION
+#define CLIP_OUT_DO_CHANGEMCUMODE
+#define CLIP_OUT_DO_BL_FLAG
+#define CLIP_OUT_DO_RESTOREDEFAULT
+#define CLIP_OUT_DO_SYSPWD
+#define CLIP_OUT_DO_SHADOW
+#define CLIP_OUT_DO_BATVOL
+#define CLIP_OUT_DO_CHECKSEC
+#define CLIP_OUT_DO_VERICONF
+#define CLIP_OUT_DO_CHECKAUDIO
+#define CLIP_OUT_DO_CHECK
+#define CLIP_OUT_DO_RAM
+#define CLIP_OUT_DO_FLASH
+#define CLIP_OUT_DO_CHECK_FLASH_BAD_BLOCK
+#define CLIP_OUT_DO_HWINFO
+#define CLIP_OUT_DO_SED
+#define CLIP_OUT_DO_MIC
+#define CLIP_OUT_DO_UPGRADE
+#define CLIP_OUT_DO_CORE_NUM
+#define CLIP_OUT_DO_NET_OPEN
+#define CLIP_OUT_DO_TESTINFO
+#define CLIP_OUT_DO_LOG
+#define CLIP_OUT_DO_REBOOT
+#define CLIP_OUT_DO_TEST_MODE
+#define CLIP_OUT_DO_KILLALL
+#define CLIP_OUT_DO_SECBOOT
+#define CLIP_OUT_DO_WATERBOX
+#define CLIP_OUT_DO_DUSTBOX
+//#define CLIP_OUT_DO_RAGBOARD
+#define CLIP_OUT_DO_LDSBUMPER
+#define CLIP_OUT_DO_WATERPUMP
+#define CLIP_OUT_DO_WATERLEVEL
+#define CLIP_OUT_DO_DOCKERBUMPER
+#define CLIP_OUT_DO_LAGUAGE
+
+#define CLIP_OUT_DO_STRETCH_SWEEP_DET
+//#define CLIP_OUT_DO_RAG_LIGHT_DET
+#define CLIP_OUT_DO_WHEEL_DET
+
+#define CLIP_OUT_DO_TEMP
+#define CLIP_OUT_DO_BAROMETER
+#define CLIP_OUT_DO_RR_MODEL_SET
+#define CLIP_OUT_DO_SHADOW_VERIFY
+#define CLIP_OUT_DO_ERASE
+#define CLIP_OUT_DO_FULLINFO
+#define CLIP_OUT_DO_PLANEANGLE
+#define CLIP_OUT_DO_SPEAKER
+#define CLIP_OUT_DO_CFG_MCUINFO
+#define CLIP_OUT_DO_FILE_SET
+#define CLIP_OUT_DO_FILE_COMBINE
+#define CLIP_OUT_DO_BAROMETER
+
+#define CLIP_OUT_DO_SWEEP_STRETCH_LIFT
+//#define CLIP_OUT_DO_SIDEMOP
+#define CLIP_OUT_DO_SWEEP
+#define CLIP_OUT_DO_DOCK
+#define CLIP_OUT_DO_MIC
+#define CLIP_OUT_DO_LED
+#define CLIP_OUT_DO_ARM_JOINT
+#define CLIP_OUT_DO_TOF
+#define CLIP_OUT_DO_RAG_STRETCH
+#define CLIP_OUT_DO_ARM_BUMPER
+#define CLIP_OUT_DO_ARM_EMER
+#define CLIP_OUT_DO_CABIN_BUMPER
+#define CLIP_OUT_DO_BRUSHWALK
+#endif
+
+#endif // __RUA_FACTORY_H__
