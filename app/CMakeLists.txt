@@ -1,6 +1,6 @@
 # 创建可执行文件
 add_executable(test_serial test_serial.cpp)
-# target_link_libraries(oht_device PRIVATE oht_depend)
+target_link_libraries(test_serial PRIVATE test_depend)
 
 # # 指定外部库路径
 # set(EXTERNAL_LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
