@@ -11,6 +11,7 @@ endif()
 
 option(USE_CROSS_COMPILE "Use cross-compiled compiler" OFF)
 if(USE_CROSS_COMPILE)
+  message(STATUS "INFO: USE_CROSS_COMPILE = " ${USE_CROSS_COMPILE})
   include(cmake/arm-cross-toolchain.cmake)
 endif()
 

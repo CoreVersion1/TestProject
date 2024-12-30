@@ -16,8 +16,8 @@
 mkdir -p ./build && cd ./build
 
 # CMake + 编译
-cmake .. && cmake --build . -j
+cmake -B ./build -S . && cmake --build ./build -j
 
 # CMake + 交叉编译
-cmake -DUSE_CROSS_COMPILE=ON .. && cmake --build . -j
+cmake -B ./build -S . -DUSE_CROSS_COMPILE=ON && cmake --build ./build -j
 ```
