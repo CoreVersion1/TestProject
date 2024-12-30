@@ -2,12 +2,8 @@
 add_executable(test_serial test_serial.cpp)
 target_link_libraries(test_serial PRIVATE test_depend)
 
-# # 指定外部库路径
-# set(EXTERNAL_LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
-# set(EXTERNAL_LIBS "${EXTERNAL_LIBS_DIR}/external_lib.so")
+add_executable(test_ap test_ap.cpp)
 
-# # 链接外部库
-# target_link_libraries(test_serial PRIVATE ${EXTERNAL_LIBS})
-
-# # 包含头文件路径
-# target_include_directories(test_serial PRIVATE ${SRC_DIR})
+set(EXTERNAL_LIBS_DIR "${CMAKE_SOURCE_DIR}/3rd_party/libs")
+target_link_directories(test_ap PRIVATE ${EXTERNAL_LIBS_DIR}/roborock)
+target_link_libraries(test_ap PRIVATE uart_api)
