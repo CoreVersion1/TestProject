@@ -26,7 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 添加include路径
 include_directories(inc)
-include_directories(3rd_party/inc)
+include_directories(third_party/inc)
 # 添加源码子目录
 add_subdirectory(src)
 add_subdirectory(app)
