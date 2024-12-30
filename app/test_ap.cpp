@@ -1,6 +1,10 @@
+#include <chrono>
 #include <iostream>
+#include <thread>
 
 #include "roborock/rda_headers.h"
+
+const int kBuffSize = 4096;
 
 int main() {
   auto ret = init_uart();
@@ -9,25 +13,28 @@ int main() {
     return -1;
   }
 
-  rua_start_request_rs485();
+  ret = rua_start_request_rs485();
+  if (ret != 0) {
+    std::cout << "rua_start_request_rs485 failed" << std::endl;
+    return -1;
+  }
 
   clean_uart();
-  sleep(1);
+  std::this_thread::sleep_for(std::chrono::seconds(1));
 
   McuGyroOdo_st mcu_info = {0};
-  char read_buff_[4096];
+  char read_buff[kBuffSize] = {0};
   int j = 0;
 
   for (int i = 0; i < 100; i++) {
-    ret = get_package(read_buff_, sizeof(read_buff_));
-
+    ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
       continue;
     }
 
-    UART_API_LOGS_TS("%s:got package, size=%d\n", __func__, ret);
-    char *src = read_buff_;
-    char *structp = NULL;
+    std::printf("%s:got package, size=%d\n", __func__, ret);
+    char *src = read_buff;
+    char *structp = nullptr;
     int struct_size = 0;
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
@@ -53,10 +60,9 @@ int main() {
 
       continue;
     }
-    usleep(10);
+    std::this_thread::sleep_for(std::chrono::microseconds(10));
   }
   rua_stop_request_rs485();
-  return 0;
 
   return 0;
 }
