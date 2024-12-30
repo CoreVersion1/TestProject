@@ -23,7 +23,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 添加include路径、源码子目录
+# 添加include路径
 include_directories(inc)
+include_directories(3rd_party/inc)
+# 添加源码子目录
 add_subdirectory(src)
 add_subdirectory(app)
