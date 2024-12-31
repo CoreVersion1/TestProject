@@ -44,7 +44,7 @@ void print_mcu_info(const McuGyroOdo_st &mcu_info) {
   oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
 
   // 打印结果
-  std::cout << oss.str();
+  std::cout << oss.str() << std::endl;
 }
 
 int main() {
