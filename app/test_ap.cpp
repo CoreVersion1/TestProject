@@ -1,10 +1,51 @@
 #include <chrono>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <thread>
 
 #include "roborock/rda_headers.h"
 
+const int kTryCnt = 100;
 const int kBuffSize = 4096;
+
+void print_mcu_info(const McuGyroOdo_st &mcu_info) {
+  std::ostringstream oss;
+
+  // 输出时间戳
+  oss << "info McuGyroOdo_st: " << __func__ << "\n"
+      << "time_stamp = " << mcu_info.time_stamp << "\n";
+
+  // 输出加速度
+  oss << "acc =";
+  for (int i = 0; i < 3; ++i) {
+    oss << " " << std::fixed << std::setprecision(4) << mcu_info.acc[i];
+  }
+  oss << "\n";
+
+  // 输出陀螺仪
+  oss << "gyro =";
+  for (int i = 0; i < 3; ++i) {
+    oss << " " << std::fixed << std::setprecision(4) << mcu_info.gyro[i];
+  }
+  oss << "\n";
+
+  // 输出四元数
+  oss << "quat =";
+  for (int i = 0; i < 3; ++i) {
+    oss << " " << std::fixed << std::setprecision(4) << mcu_info.quat[i];
+  }
+  oss << "\n";
+
+  // 输出轮速
+  oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] << "\n";
+
+  // 输出里程计
+  oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
+
+  // 打印结果
+  std::cout << oss.str();
+}
 
 int main() {
   auto ret = init_uart();
@@ -26,7 +67,7 @@ int main() {
   char read_buff[kBuffSize] = {0};
   int j = 0;
 
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < kTryCnt; i++) {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
       continue;
@@ -38,24 +79,13 @@ int main() {
     int struct_size = 0;
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
-      if (j == RPT_MOTOR_MCU_ID) {
-        if (struct_size <= sizeof(McuGyroOdo_st)) {
-          memcpy(&mcu_info, structp, struct_size);
-          std::printf("%s:Found response, ID=0x%x, size=%d\n", __func__, j,
-                      struct_size);
+      if ((j == RPT_MOTOR_MCU_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
+        memcpy(&mcu_info, structp, struct_size);
+        std::printf("%s:Found response, ID=0x%x, size=%d\n", __func__, j,
+                    struct_size);
 
-          std::printf(
-              "info McuGyroOdo_st: %s\n, time_stamp = %d\n, acc = %f, %f, "
-              "%f\n gyro "
-              "= %f, %f, %f\n quat = %f, %f, %f\n wheel = %d, %d\n odo = "
-              "%f, %f\n",
-              __func__, mcu_info.time_stamp, mcu_info.acc[0], mcu_info.acc[1],
-              mcu_info.acc[2], mcu_info.gyro[0], mcu_info.gyro[1],
-              mcu_info.gyro[2], mcu_info.quat[0], mcu_info.quat[1],
-              mcu_info.quat[2], mcu_info.wheel[0], mcu_info.wheel[1],
-              mcu_info.odo[0], mcu_info.odo[1]);
-          break;
-        }
+        print_mcu_info(mcu_info);
+        break;
       }
 
       continue;
