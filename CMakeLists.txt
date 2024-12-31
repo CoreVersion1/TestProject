@@ -30,3 +30,4 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/inc)
 # 添加源码子目录
 add_subdirectory(src)
 add_subdirectory(app)
+add_subdirectory(test)
