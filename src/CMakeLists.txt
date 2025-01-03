@@ -1,11 +1,15 @@
 add_subdirectory(SerialPort)
+add_subdirectory(Common)
 
-set(Target_List SerialPort)
+set(Objects_List
+    $<TARGET_OBJECTS:SerialPort>
+    $<TARGET_OBJECTS:Common>
+)
 
 if(STATIC_LINK)
-  add_library(test_depend STATIC $<TARGET_OBJECTS:${Target_List}>)
+  add_library(test_depend STATIC ${Objects_List})
 else()
-  add_library(test_depend SHARED $<TARGET_OBJECTS:${Target_List}>)
+  add_library(test_depend SHARED ${Objects_List})
 endif()
 
 set_target_properties(test_depend PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -1,10 +1,12 @@
-#include <chrono>
-#include <iomanip>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <thread>
 
 #include "roborock/rda_headers.h"
+#include "Common/Common.hpp"
+
+using namespace TestProject;
 
 const int kTryCnt = 100;
 const int kBuffSize = 4096;
@@ -84,6 +86,7 @@ int main() {
         std::printf("%s:Found response, ID=0x%x, size=%d\n", __func__, j,
                     struct_size);
 
+        print_time_stamp();
         print_mcu_info(mcu_info);
         break;
       }
