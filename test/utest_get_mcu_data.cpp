@@ -1,10 +1,10 @@
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <thread>
 
-#include "roborock/rda_headers.h"
 #include "Common/Common.hpp"
+#include "roborock/rda_headers.h"
 
 using namespace TestProject;
 
@@ -69,6 +69,8 @@ int main() {
   char read_buff[kBuffSize] = {0};
   int j = 0;
 
+  int cnt_index = 0;
+
   for (int i = 0; i < kTryCnt; i++) {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
@@ -83,8 +85,8 @@ int main() {
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
       if ((j == RPT_MOTOR_MCU_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
         memcpy(&mcu_info, structp, struct_size);
-        std::printf("%s:Found response, ID=0x%x, size=%d\n", __func__, j,
-                    struct_size);
+        std::printf("%s:Found response, ID=0x%x, size=%d, cnt=%d\n", __func__,
+                    j, struct_size, cnt_index++);
 
         print_time_stamp();
         print_mcu_info(mcu_info);
