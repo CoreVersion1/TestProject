@@ -18,7 +18,7 @@ public:
 
   void openPort(const std::string &device);
 
-  void configure();
+  void configure(int baud_rate = 115200);
 
   void ReadData();
 

@@ -21,16 +21,77 @@ void SerialPort::openPort(const std::string &device) {
   }
 }
 
-void SerialPort::configure() {
+void SerialPort::configure(int baud_rate) {
   struct termios tty;
   if (tcgetattr(serial_fd_, &tty) != 0) {
     perror("Error getting terminal attributes");
     exit(EXIT_FAILURE);
   }
 
+  speed_t baud;
+  switch (baud_rate) {
+  case 9600:
+    baud = B9600;
+    break;
+  case 19200:
+    baud = B19200;
+    break;
+  case 38400:
+    baud = B38400;
+    break;
+  case 57600:
+    baud = B57600;
+    break;
+  case 115200:
+    baud = B115200;
+    break;
+  case 230400:
+    baud = B230400;
+    break;
+  case 460800:
+    baud = B460800;
+    break;
+  case 500000:
+    baud = B500000;
+    break;
+  case 576000:
+    baud = B576000;
+    break;
+  case 921600:
+    baud = B921600;
+    break;
+  case 1000000:
+    baud = B1000000;
+    break;
+  case 1152000:
+    baud = B1152000;
+    break;
+  case 1500000:
+    baud = B1500000;
+    break;
+  case 2000000:
+    baud = B2000000;
+    break;
+  case 2500000:
+    baud = B2500000;
+    break;
+  case 3000000:
+    baud = B3000000;
+    break;
+  case 3500000:
+    baud = B3500000;
+    break;
+  case 4000000:
+    baud = B4000000;
+    break;
+  default:
+    std::cerr << "Unsupported baud rate: " << baud_rate << std::endl;
+    exit(EXIT_FAILURE);
+  }
+
   // Set baud rate (e.g., 115200)
-  cfsetospeed(&tty, B115200);
-  cfsetispeed(&tty, B115200);
+  cfsetospeed(&tty, baud);
+  cfsetispeed(&tty, baud);
 
   // Configure 8N1 mode: 8 data bits, no parity, 1 stop bit
   tty.c_cflag &= ~(CSIZE | CSTOPB | PARENB | INPCK);
