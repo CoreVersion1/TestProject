@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
   if (serial_dev.empty() || mode.empty()) {
     std::cerr << "Usage: " << argv[0]
               << " -d <serial_device> <-l|-r|-t> [-b <baud_rate>]" << std::endl;
-    std::cerr << "Example: " << argv[0] << " -d /dev/ttyUSB0 -l -b 9600"
+    std::cerr << "Example: " << argv[0] << " -d /dev/ttyUSB0 -l -b 115200"
               << std::endl;
     return EXIT_FAILURE;
   }
