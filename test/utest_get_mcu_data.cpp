@@ -88,13 +88,12 @@ int main() {
       if ((j == RPT_MOTOR_MCU_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
         memcpy(&mcu_info, structp, struct_size);
 
-        get_idx++;
         auto time_now = get_time_now_ms();
         auto frq = (1 * 1000.0) / (time_now - time_start);
         time_start = time_now;
         std::printf("%s:Found response, ID=0x%x, size=%d, try_cnt=%d, "
                     "get_index=%d, frq=%.2fHz\n",
-                    __func__, j, struct_size, try_idx, get_idx, frq);
+                    __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
         print_mcu_info(mcu_info);
