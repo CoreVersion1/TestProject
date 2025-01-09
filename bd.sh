@@ -19,8 +19,11 @@ elif [ "$1" == "clean" ]; then
   # 输入参数为"clean"时清空build目录
   rm -rf ./build/*
   echo "Build directory cleaned."
+  exit 0
 else
   echo "invalid argument: $1"
   echo "Usage: $0 [cross|clean]"
   exit 1
 fi
+
+ls ./build/src ./build/app ./build/test
