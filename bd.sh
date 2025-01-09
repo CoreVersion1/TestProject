@@ -20,6 +20,9 @@ elif [ "$1" == "clean" ]; then
   rm -rf ./build/*
   echo "Build directory cleaned."
   exit 0
+elif [ "$1" == "-h" ]; then
+  echo "Usage: $0 [cross|clean]"
+  exit 0
 else
   echo "invalid argument: $1"
   echo "Usage: $0 [cross|clean]"
