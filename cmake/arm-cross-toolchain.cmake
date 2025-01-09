@@ -1,3 +1,5 @@
+message(STATUS "INFO: use cross compile")
+
 # 设置交叉编译的操作系统和架构
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)

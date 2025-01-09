@@ -12,12 +12,12 @@
 ## 开始编译
 
 ```shell
-# 在代码根目录建立build目录，后面的命令默认都在该路径下执行
-mkdir -p ./build && cd ./build
+# 编译
+bd.sh
 
-# CMake + 编译
-cmake -B ./build -S . && cmake --build ./build -j
+# 交叉编译
+bd.sh cross
 
-# CMake + 交叉编译
-cmake -B ./build -S . -DUSE_CROSS_COMPILE=ON && cmake --build ./build -j
+# 清理编译目录
+bd.sh clean
 ```
