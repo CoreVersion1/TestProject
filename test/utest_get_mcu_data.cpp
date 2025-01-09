@@ -8,7 +8,7 @@
 
 using namespace TestProject;
 
-const int kTryCnt = 200;
+const int kTryCnt = 300;
 const int kGetCnt = 50;
 const int kBuffSize = 4096;
 
@@ -70,10 +70,12 @@ int main() {
   char read_buff[kBuffSize] = {0};
   int j = 0;
 
+  auto time_start = get_time_now_ms();
   for (int try_idx = 0, get_idx = 0; (try_idx < kTryCnt) && (get_idx < kGetCnt);
        try_idx++) {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
+      std::this_thread::sleep_for(std::chrono::microseconds(1));
       continue;
     }
 
@@ -85,9 +87,14 @@ int main() {
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
       if ((j == RPT_MOTOR_MCU_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
         memcpy(&mcu_info, structp, struct_size);
-        std::printf(
-            "%s:Found response, ID=0x%x, size=%d, try cnt=%d, get index=%d\n",
-            __func__, j, struct_size, try_idx, get_idx++);
+
+        get_idx++;
+        auto time_now = get_time_now_ms();
+        auto frq = (1 * 1000.0) / (time_now - time_start);
+        time_start = time_now;
+        std::printf("%s:Found response, ID=0x%x, size=%d, try_cnt=%d, "
+                    "get_index=%d, frq=%.2fHz\n",
+                    __func__, j, struct_size, try_idx, get_idx, frq);
 
         print_time_stamp();
         print_mcu_info(mcu_info);
@@ -96,7 +103,6 @@ int main() {
 
       continue;
     }
-    std::this_thread::sleep_for(std::chrono::microseconds(1));
   }
   rua_stop_request_rs485();
 
