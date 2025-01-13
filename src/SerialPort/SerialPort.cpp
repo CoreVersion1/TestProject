@@ -13,11 +13,18 @@
 
 namespace TestProject {
 
-void SerialPort::openPort(const std::string &device) {
+void SerialPort::OpenPort(const std::string &device) {
   serial_fd_ = open(device.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
   if (serial_fd_ < 0) {
     perror("Error opening serial port");
     exit(EXIT_FAILURE);
+  }
+}
+
+void SerialPort::ClosePort() {
+  if (serial_fd_ >= 0) {
+    close(serial_fd_);
+    serial_fd_ = -1;
   }
 }
 
@@ -109,15 +116,24 @@ void SerialPort::configure(int baud_rate) {
 }
 
 void SerialPort::ReadData() {
-  char buffer[256] = {};
+  fd_set read_fds;
+  char buffer[kBuffSize] = {};
   while (true) {
-    int bytes_read = read(serial_fd_, buffer, sizeof(buffer) - 1);
-    if (bytes_read > 0) {
-      buffer[bytes_read] = '\0';
-      std::lock_guard<std::mutex> lock(output_mutex_);
-      std::cout << "\nRx: " << buffer << "\nTx: " << std::flush;
-    } else if (bytes_read == -1) {
-      perror("Error reading from serial port");
+    FD_ZERO(&read_fds); // Clear the set
+    FD_SET(serial_fd_, &read_fds); // Add our file descriptor to the set
+
+    struct timeval timeout = {1, 0}; // 1 second timeout
+    int ret = select(serial_fd_ + 1, &read_fds, nullptr, nullptr, &timeout);
+
+    if (ret > 0 && FD_ISSET(serial_fd_, &read_fds)) {
+      int bytes_read = read(serial_fd_, buffer, sizeof(buffer) - 1);
+      if (bytes_read > 0) {
+        buffer[bytes_read] = '\0';
+        std::lock_guard<std::mutex> lock(output_mutex_);
+        std::cout << "\nRx: " << buffer << "\nTx: " << std::flush;
+      } else if (bytes_read == -1) {
+        perror("Error reading from serial port");
+      }
     }
   }
 }

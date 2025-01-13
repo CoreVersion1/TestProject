@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   }
 
   SerialPort serial;
-  serial.openPort(serial_dev);
+  serial.OpenPort(serial_dev);
 
   // 配置波特率
   try {
