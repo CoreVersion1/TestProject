@@ -40,11 +40,11 @@ void print_mcu_info(const McuGyroOdo_st &mcu_info) {
   }
   oss << "\n";
 
-  // 输出轮速
-  oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] << "\n";
+  // // 输出轮速
+  // oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] << "\n";
 
-  // 输出里程计
-  oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
+  // // 输出里程计
+  // oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
 
   // 打印结果
   std::cout << oss.str() << std::endl;
@@ -85,7 +85,7 @@ int main() {
     int struct_size = 0;
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
-      if ((j == RPT_MOTOR_MCU_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
+      if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
         memcpy(&mcu_info, structp, struct_size);
 
         auto time_now = get_time_now_ms();

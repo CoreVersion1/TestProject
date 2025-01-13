@@ -16,7 +16,7 @@ int main() {
   clean_uart();
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  McuOdoSpd_t spd_info = {1,2};
+  McuOdoSpd_st spd_info = {1,2};
   ret = sent_basic_cmd(CMD_SET_ODO_SPD_ID, sizeof(spd_info), &spd_info);
 
   return 0;
