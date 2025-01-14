@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 
   // 配置波特率
   try {
-    serial.configure(baud_rate); // 使用指定或默认波特率
+    serial.Config(baud_rate); // 使用指定或默认波特率
   } catch (const std::exception &e) {
     std::cerr << "Error configuring serial port: " << e.what() << std::endl;
     return EXIT_FAILURE;
@@ -56,11 +56,11 @@ int main(int argc, char *argv[]) {
   std::thread writerThread;
 
   if (mode == "-l" || mode == "-r") {
-    readerThread = std::thread(&SerialPort::ReadData, &serial);
+    readerThread = std::thread(&SerialPort::LoopRead, &serial);
   }
 
   if (mode == "-l" || mode == "-t") {
-    writerThread = std::thread(&SerialPort::WriteData, &serial);
+    writerThread = std::thread(&SerialPort::LoopWrite, &serial);
   }
 
   if (writerThread.joinable()) {

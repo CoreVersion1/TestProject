@@ -6,7 +6,9 @@
 #include <fstream>
 #include <iostream>
 #include <mutex>
+#include <poll.h>
 #include <string>
+#include <sys/epoll.h>
 #include <termios.h>
 #include <thread>
 #include <unistd.h>
@@ -28,9 +30,65 @@ void SerialPort::ClosePort() {
   }
 }
 
-void SerialPort::configure(int baud_rate) {
+void SerialPort::Config(int baud_rate, bool use_epoll) {
+  SetTty(serial_fd_, baud_rate);
+  use_epoll_ = use_epoll;
+}
+
+int SerialPort::Read(char *buf, int len, int timeout_ms) {
+  int ret = 0;
+  if (use_epoll_) {
+    ret = WaitData_Epoll(serial_fd_, 1000);
+  } else {
+    ret = WaitData_Poll(serial_fd_, 1000);
+  }
+
+  if (ret < 0) {
+    std::cerr << "Error waiting for data" << std::endl;
+    return ret;
+  } else if (ret == 0) {
+    return ret;
+  }
+
+  return read(serial_fd_, buf, len - 1);
+}
+
+int SerialPort::Write(const char *buf, int len, int timeout_ms) {
+  return write(serial_fd_, buf, len);
+}
+
+void SerialPort::LoopRead() {
+  char buffer[kBuffSize] = {};
+  while (true) {
+    auto bytes_read = Read(buffer, sizeof(buffer), 1000);
+    if (bytes_read > 0) {
+      buffer[bytes_read] = '\0';
+      std::lock_guard<std::mutex> lock(output_mutex_);
+      std::cout << "\nRx: " << buffer << "\nTx: " << std::flush;
+    } else if (bytes_read == -1) {
+      perror("Error reading from serial port");
+    }
+  }
+}
+
+void SerialPort::LoopWrite() {
+  while (true) {
+    {
+      std::lock_guard<std::mutex> lock(output_mutex_);
+      std::cout << "Tx: " << std::flush;
+    }
+    std::string input;
+    std::getline(std::cin, input);
+
+    if (Write(input.c_str(), input.size(), 1000) < 0) {
+      perror("Error writing to serial port");
+    }
+  }
+}
+
+int SerialPort::SetTty(int fd, int baud_rate) {
   struct termios tty;
-  if (tcgetattr(serial_fd_, &tty) != 0) {
+  if (tcgetattr(fd, &tty) != 0) {
     perror("Error getting terminal attributes");
     exit(EXIT_FAILURE);
   }
@@ -113,44 +171,36 @@ void SerialPort::configure(int baud_rate) {
     perror("Error setting terminal attributes");
     exit(EXIT_FAILURE);
   }
+
+  return 0;
 }
 
-void SerialPort::ReadData() {
-  fd_set read_fds;
-  char buffer[kBuffSize] = {};
-  while (true) {
-    FD_ZERO(&read_fds); // Clear the set
-    FD_SET(serial_fd_, &read_fds); // Add our file descriptor to the set
-
-    struct timeval timeout = {1, 0}; // 1 second timeout
-    int ret = select(serial_fd_ + 1, &read_fds, nullptr, nullptr, &timeout);
-
-    if (ret > 0 && FD_ISSET(serial_fd_, &read_fds)) {
-      int bytes_read = read(serial_fd_, buffer, sizeof(buffer) - 1);
-      if (bytes_read > 0) {
-        buffer[bytes_read] = '\0';
-        std::lock_guard<std::mutex> lock(output_mutex_);
-        std::cout << "\nRx: " << buffer << "\nTx: " << std::flush;
-      } else if (bytes_read == -1) {
-        perror("Error reading from serial port");
-      }
-    }
-  }
+int SerialPort::WaitData_Poll(int fd, int timeout_ms) {
+  struct pollfd pfd = {fd, POLLIN, 0}; // POLLIN 表示等待可读事件
+  return poll(&pfd, 1, timeout_ms);    // 等待timeout_ms毫秒
 }
 
-void SerialPort::WriteData() {
-  while (true) {
-    {
-      std::lock_guard<std::mutex> lock(output_mutex_);
-      std::cout << "Tx: " << std::flush;
-    }
-    std::string input;
-    std::getline(std::cin, input);
-
-    if (write(serial_fd_, input.c_str(), input.size()) == -1) {
-      perror("Error writing to serial port");
-    }
+int SerialPort::WaitData_Epoll(int fd, int timeout_ms) {
+  int epoll_fd = epoll_create1(0); // 创建 epoll 实例
+  if (epoll_fd == -1) {
+    perror("epoll_create1 failed");
+    return -1;
   }
+
+  struct epoll_event event;
+  event.events = EPOLLIN; // 等待可读事件
+  event.data.fd = fd;     // 添加串口文件描述符
+
+  if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &event) == -1) {
+    perror("epoll_ctl failed");
+    close(epoll_fd);
+    return -1;
+  }
+
+  struct epoll_event events[1];
+  int ret = epoll_wait(epoll_fd, events, 1, timeout_ms); // 等待timeout_ms毫秒
+  close(epoll_fd);                                       // 关闭 epoll 实例
+  return ret; // 返回epoll_wait的结果，用于判断是否有数据
 }
 
 } // namespace TestProject
