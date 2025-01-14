@@ -15,27 +15,19 @@
 
 namespace TestProject {
 
-void SerialPort::OpenPort(const std::string &device) {
-  serial_fd_ = open(device.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
-  if (serial_fd_ < 0) {
-    perror("Error opening serial port");
-    exit(EXIT_FAILURE);
-  }
-}
-
-void SerialPort::ClosePort() {
-  if (serial_fd_ >= 0) {
-    close(serial_fd_);
-    serial_fd_ = -1;
-  }
-}
-
 void SerialPort::Config(int baud_rate, bool use_epoll) {
+  Open();
   SetTty(serial_fd_, baud_rate);
   use_epoll_ = use_epoll;
+  is_inited_ = true;
 }
 
 int SerialPort::Read(char *buf, int len, int timeout_ms) {
+  if (!is_inited_) {
+    std::cerr << "Serial port not initialized" << std::endl;
+    return -1;
+  }
+
   int ret = 0;
   if (use_epoll_) {
     ret = WaitData_Epoll(serial_fd_, 1000);
@@ -54,6 +46,11 @@ int SerialPort::Read(char *buf, int len, int timeout_ms) {
 }
 
 int SerialPort::Write(const char *buf, int len, int timeout_ms) {
+  if (!is_inited_) {
+    std::cerr << "Serial port not initialized" << std::endl;
+    return -1;
+  }
+
   return write(serial_fd_, buf, len);
 }
 
@@ -83,6 +80,21 @@ void SerialPort::LoopWrite() {
     if (Write(input.c_str(), input.size(), 1000) < 0) {
       perror("Error writing to serial port");
     }
+  }
+}
+
+void SerialPort::Open() {
+  serial_fd_ = open(serial_dev_.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
+  if (serial_fd_ < 0) {
+    perror("Error opening serial port");
+    exit(EXIT_FAILURE);
+  }
+}
+
+void SerialPort::Close() {
+  if (serial_fd_ >= 0) {
+    close(serial_fd_);
+    serial_fd_ = -1;
   }
 }
 

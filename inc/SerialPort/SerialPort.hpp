@@ -10,13 +10,9 @@ const int kBuffSize = 1024;
 
 class SerialPort {
 public:
-  SerialPort() : serial_fd_(-1) {}
+  SerialPort(const std::string &dev) : serial_dev_(dev) {}
 
-  ~SerialPort() { ClosePort(); }
-
-  void OpenPort(const std::string &device);
-
-  void ClosePort();
+  ~SerialPort() { Close(); }
 
   void Config(int baud_rate = 115200, bool use_epoll = false);
 
@@ -29,11 +25,15 @@ public:
   void LoopWrite();
 
 private:
+  void Open();
+  void Close();
   int SetTty(int fd, int baud_rate);
   int WaitData_Poll(int fd, int timeout_ms);
   int WaitData_Epoll(int fd, int timeout_ms);
 
 private:
+  bool is_inited_ = false;
+  std::string serial_dev_ = {};
   int serial_fd_ = {}; // File descriptor
   std::mutex output_mutex_ = {};
   bool use_epoll_ = false;

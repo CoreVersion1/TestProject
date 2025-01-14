@@ -37,9 +37,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  SerialPort serial;
-  serial.OpenPort(serial_dev);
-
+  SerialPort serial(serial_dev);
   // 配置波特率
   try {
     serial.Config(baud_rate); // 使用指定或默认波特率
