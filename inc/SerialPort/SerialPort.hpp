@@ -12,9 +12,7 @@ class SerialPort {
 public:
   SerialPort() : serial_fd_(-1) {}
 
-  ~SerialPort() {
-    ClosePort();
-  }
+  ~SerialPort() { ClosePort(); }
 
   void OpenPort(const std::string &device);
 
