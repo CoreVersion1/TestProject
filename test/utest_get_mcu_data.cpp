@@ -12,7 +12,7 @@ const int kTryCnt = 300;
 const int kGetCnt = 50;
 const int kBuffSize = 4096;
 
-void print_mcu_info(const McuGyroOdo_st &mcu_info) {
+void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info) {
   std::ostringstream oss;
 
   // 输出时间戳
@@ -41,12 +41,51 @@ void print_mcu_info(const McuGyroOdo_st &mcu_info) {
   oss << "\n";
 
   // // 输出轮速
-  // oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] << "\n";
+  // oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] <<
+  // "\n";
 
   // // 输出里程计
   // oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
 
   // 打印结果
+  std::cout << oss.str() << std::endl;
+}
+
+void print_McuSensor_st(const McuSensor_st &mcu_sensor) {
+  std::ostringstream oss;
+
+  oss << "info McuSensor_st: " << __func__ << "\n"
+      << "emergent_stop = " << mcu_sensor.emergent_stop << "\n"
+      << "bumper_left = " << mcu_sensor.bumper_left << "\n"
+      << "bumper_right = " << mcu_sensor.bumper_right << "\n"
+      << "lift_left = " << mcu_sensor.lift_left << "\n"
+      << "lift_right = " << mcu_sensor.lift_right << "\n"
+      << "pose_tilt = " << mcu_sensor.pose_tilt << "\n"
+      << "pose_flip = " << mcu_sensor.pose_flip << "\n"
+      << "env_grass = " << mcu_sensor.env_grass << "\n"
+      << "env_rain = " << mcu_sensor.env_rain << "\n"
+      << "resv = " << mcu_sensor.resv << "\n";
+
+  std::cout << oss.str() << std::endl;
+}
+
+void print_McuKey_st(const McuKey_st &mcu_key) {
+  std::ostringstream oss;
+
+  oss << "info McuKey_st: " << __func__ << "\n"
+      << "Key = " << mcu_key.Key << "\n"
+      << "battery_percent = " << mcu_key.battery_percent << "\n";
+
+  std::cout << oss.str() << std::endl;
+}
+
+void print_McuState_st(const McuState_st &mcu_state) {
+  std::ostringstream oss;
+
+  oss << "info McuState_st: " << __func__ << "\n"
+      << "state = " << mcu_state.state << "\n"
+      << "error = " << mcu_state.error << "\n";
+
   std::cout << oss.str() << std::endl;
 }
 
@@ -66,7 +105,6 @@ int main() {
   clean_uart();
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  McuGyroOdo_st mcu_info = {0};
   char read_buff[kBuffSize] = {0};
   int j = 0;
 
@@ -85,7 +123,10 @@ int main() {
     int struct_size = 0;
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0) {
-      if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st))) {
+      if ((j == RPT_MCU_POSE_MOTOR_ID) &&
+          (struct_size <= sizeof(McuGyroOdo_st))) {
+
+        McuGyroOdo_st mcu_info = {0};
         memcpy(&mcu_info, structp, struct_size);
 
         auto time_now = get_time_now_ms();
@@ -96,8 +137,21 @@ int main() {
                     __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
-        print_mcu_info(mcu_info);
+        print_McuGyroOdo_st(mcu_info);
         break;
+      } else if (j == RPT_MCU_SENSOR_ID &&
+                 struct_size <= sizeof(McuSensor_st)) {
+        McuSensor_st mcu_sensor = {};
+        memcpy(&mcu_sensor, structp, struct_size);
+        print_McuSensor_st(mcu_sensor);
+      } else if (j == RPT_MCU_KEY_ID && struct_size <= sizeof(McuKey_st)) {
+        McuKey_st mcu_key = {};
+        memcpy(&mcu_key, structp, struct_size);
+        print_McuKey_st(mcu_key);
+      } else if (j == RPT_MCU_STATE_ID && struct_size <= sizeof(McuState_st)) {
+        McuState_st mcu_state = {};
+        memcpy(&mcu_state, structp, struct_size);
+        print_McuState_st(mcu_state);
       }
 
       continue;
