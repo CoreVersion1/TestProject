@@ -74,7 +74,8 @@ void print_McuKey_st(const McuKey_st &mcu_key) {
 
   oss << "info McuKey_st: " << __func__ << "\n"
       << "Key = " << static_cast<uint32_t>(mcu_key.Key) << "\n"
-      << "battery_percent = " << static_cast<uint32_t>(mcu_key.battery_percent) << "\n";
+      << "battery_percent = " << static_cast<uint32_t>(mcu_key.battery_percent)
+      << "\n";
 
   std::cout << oss.str() << std::endl;
 }
