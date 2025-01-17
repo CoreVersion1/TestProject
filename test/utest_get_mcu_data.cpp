@@ -117,6 +117,8 @@ int main() {
        try_idx++) {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
+      std::cout << "get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
+                << ", get_idx = " << get_idx << std::endl;
       std::this_thread::sleep_for(std::chrono::microseconds(1));
       continue;
     }
