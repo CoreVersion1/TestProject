@@ -16,36 +16,36 @@ void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info) {
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "info McuGyroOdo_st: " << __func__ << "\n"
-      << "time_stamp = " << mcu_info.time_stamp << "\n";
+  oss << "info McuGyroOdo_st: " << __func__ << std::endl
+      << "time_stamp = " << mcu_info.time_stamp << std::endl;
 
   // 输出加速度
   oss << "acc =";
   for (int i = 0; i < 3; ++i) {
     oss << " " << std::fixed << std::setprecision(4) << mcu_info.acc[i];
   }
-  oss << "\n";
+  oss << std::endl;
 
   // 输出陀螺仪
   oss << "gyro =";
   for (int i = 0; i < 3; ++i) {
     oss << " " << std::fixed << std::setprecision(4) << mcu_info.gyro[i];
   }
-  oss << "\n";
+  oss << std::endl;
 
   // 输出四元数
   oss << "quat =";
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < 4; ++i) {
     oss << " " << std::fixed << std::setprecision(4) << mcu_info.quat[i];
   }
-  oss << "\n";
+  oss << std::endl;
 
   // // 输出轮速
   // oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] <<
   // "\n";
 
   // // 输出里程计
-  // oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] << "\n";
+  // oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] <<std::endl;
 
   // 打印结果
   std::cout << oss.str() << std::endl;
@@ -54,17 +54,17 @@ void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info) {
 void print_McuSensor_st(const McuSensor_st &mcu_sensor) {
   std::ostringstream oss;
 
-  oss << "info McuSensor_st: " << __func__ << "\n"
-      << "emergent_stop = " << mcu_sensor.emergent_stop << "\n"
-      << "bumper_left = " << mcu_sensor.bumper_left << "\n"
-      << "bumper_right = " << mcu_sensor.bumper_right << "\n"
-      << "lift_left = " << mcu_sensor.lift_left << "\n"
-      << "lift_right = " << mcu_sensor.lift_right << "\n"
-      << "pose_tilt = " << mcu_sensor.pose_tilt << "\n"
-      << "pose_flip = " << mcu_sensor.pose_flip << "\n"
-      << "env_grass = " << mcu_sensor.env_grass << "\n"
-      << "env_rain = " << mcu_sensor.env_rain << "\n"
-      << "resv = " << mcu_sensor.resv << "\n";
+  oss << "info McuSensor_st: " << __func__ << std::endl
+      << "emergent_stop = " << mcu_sensor.emergent_stop << std::endl
+      << "bumper_left = " << mcu_sensor.bumper_left << std::endl
+      << "bumper_right = " << mcu_sensor.bumper_right << std::endl
+      << "lift_left = " << mcu_sensor.lift_left << std::endl
+      << "lift_right = " << mcu_sensor.lift_right << std::endl
+      << "pose_tilt = " << mcu_sensor.pose_tilt << std::endl
+      << "pose_flip = " << mcu_sensor.pose_flip << std::endl
+      << "env_grass = " << mcu_sensor.env_grass << std::endl
+      << "env_rain = " << mcu_sensor.env_rain << std::endl
+      << "resv = " << mcu_sensor.resv << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -72,10 +72,9 @@ void print_McuSensor_st(const McuSensor_st &mcu_sensor) {
 void print_McuKey_st(const McuKey_st &mcu_key) {
   std::ostringstream oss;
 
-  oss << "info McuKey_st: " << __func__ << "\n"
-      << "Key = " << static_cast<uint32_t>(mcu_key.Key) << "\n"
-      << "battery_percent = " << static_cast<uint32_t>(mcu_key.battery_percent)
-      << "\n";
+  oss << "info McuKey_st: " << __func__ << std::endl
+      << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl
+      << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -83,9 +82,11 @@ void print_McuKey_st(const McuKey_st &mcu_key) {
 void print_McuState_st(const McuState_st &mcu_state) {
   std::ostringstream oss;
 
-  oss << "info McuState_st: " << __func__ << "\n"
-      << "state = " << mcu_state.state << "\n"
-      << "error = " << mcu_state.error << "\n";
+  oss << "info McuState_st: " << __func__ << std::endl
+      << "state = " << mcu_state.state << std::endl
+      << "battery_percent = "
+      << static_cast<uint32_t>(mcu_state.battery_percent) << std::endl
+      << "error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -117,8 +118,8 @@ int main() {
        try_idx++) {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0) {
-      std::cout << "get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
-                << ", get_idx = " << get_idx << std::endl;
+      std::cout << "get_package fail, try_idx = " << try_idx + 1 << "/"
+                << kTryCnt << ", get_idx = " << get_idx << std::endl;
       std::this_thread::sleep_for(std::chrono::microseconds(1));
       continue;
     }
