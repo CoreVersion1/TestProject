@@ -83,6 +83,16 @@ void print_McuState_st(const McuState_st &mcu_state) {
   std::cout << oss.str() << std::endl;
 }
 
+void print_Key_st(const Key_st &key) {
+  std::ostringstream oss;
+
+  oss << "info Key_st: " << __func__ << std::endl
+      << "b6Val = " << static_cast<uint32_t>(key.b6Val) << std::endl
+      << "b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
 int main() {
   auto ret = init_uart();
   if (ret != 0) {
@@ -151,9 +161,11 @@ int main() {
         McuState_st mcu_state = {};
         memcpy(&mcu_state, structp, struct_size);
         print_McuState_st(mcu_state);
+      } else if ((j == RPT_KEY_ID) && (struct_size <= sizeof(Key_st))) {
+        Key_st key = {};
+        memcpy(&key, structp, struct_size);
+        print_Key_st(key);
       }
-
-      continue;
     }
   }
 
