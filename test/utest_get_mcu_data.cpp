@@ -40,13 +40,6 @@ void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info) {
   }
   oss << std::endl;
 
-  // // 输出轮速
-  // oss << "wheel = " << mcu_info.wheel[0] << ", " << mcu_info.wheel[1] <<
-  // "\n";
-
-  // // 输出里程计
-  // oss << "odo = " << mcu_info.odo[0] << ", " << mcu_info.odo[1] <<std::endl;
-
   // 打印结果
   std::cout << oss.str() << std::endl;
 }
@@ -73,8 +66,7 @@ void print_McuKey_st(const McuKey_st &mcu_key) {
   std::ostringstream oss;
 
   oss << "info McuKey_st: " << __func__ << std::endl
-      << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl
-      << std::endl;
+      << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
