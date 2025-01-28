@@ -4,7 +4,7 @@
 #include <sstream>
 #include <thread>
 
-#include "roborock/rda_headers.h"
+#include "roborock.symlink/rda_headers.h"
 
 int main() {
   auto ret = init_uart();

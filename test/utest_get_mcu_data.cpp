@@ -4,7 +4,7 @@
 #include <thread>
 
 #include "Common/Common.hpp"
-#include "roborock/rda_headers.h"
+#include "roborock.symlink/rda_headers.h"
 
 using namespace TestProject;
 

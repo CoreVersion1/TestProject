@@ -37,3 +37,6 @@
 # build
 build
 release
+
+# soft link
+*.symlink
