@@ -12,12 +12,22 @@ const int kTryCnt   = 300;
 const int kGetCnt   = 50;
 const int kBuffSize = 4096;
 
-void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info)
+void print_Sensor_u(const int &id, const Sensor_u &sensor)
+{
+  std::ostringstream oss;
+
+  oss << "info id = " << id << ", Sensor_u: " << __func__ << std::endl
+      << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+void print_McuGyroOdo_st(const int &id, const McuGyroOdo_st &mcu_info)
 {
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "info McuGyroOdo_st: " << __func__ << std::endl
+  oss << "info id = " << id << ", McuGyroOdo_st: " << __func__ << std::endl
       << "time_stamp = " << mcu_info.time_stamp << std::endl;
 
   // 输出加速度
@@ -48,11 +58,11 @@ void print_McuGyroOdo_st(const McuGyroOdo_st &mcu_info)
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuSensor_st(const McuSensor_st &mcu_sensor)
+void print_McuSensor_st(const int &id, const McuSensor_st &mcu_sensor)
 {
   std::ostringstream oss;
 
-  oss << "info McuSensor_st: " << __func__ << std::endl
+  oss << "info id = " << id << ", McuSensor_st: " << __func__ << std::endl
       << "emergent_stop = " << mcu_sensor.emergent_stop << std::endl
       << "bumper_left = " << mcu_sensor.bumper_left << std::endl
       << "bumper_right = " << mcu_sensor.bumper_right << std::endl
@@ -67,21 +77,21 @@ void print_McuSensor_st(const McuSensor_st &mcu_sensor)
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuKey_st(const McuKey_st &mcu_key)
+void print_McuKey_st(const int &id, const McuKey_st &mcu_key)
 {
   std::ostringstream oss;
 
-  oss << "info McuKey_st: " << __func__ << std::endl
+  oss << "info id = " << id << ", McuKey_st: " << __func__ << std::endl
       << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuState_st(const McuState_st &mcu_state)
+void print_McuState_st(const int &id, const McuState_st &mcu_state)
 {
   std::ostringstream oss;
 
-  oss << "info McuState_st: " << __func__ << std::endl
+  oss << "info id = " << id << ", McuState_st: " << __func__ << std::endl
       << "state = " << mcu_state.state << std::endl
       << "battery_percent = " << static_cast<uint32_t>(mcu_state.battery_percent) << std::endl
       << "error = " << mcu_state.error << std::endl;
@@ -89,19 +99,31 @@ void print_McuState_st(const McuState_st &mcu_state)
   std::cout << oss.str() << std::endl;
 }
 
-void print_Key_st(const Key_st &key)
+void print_Key_st(const int &id, const Key_st &key)
 {
   std::ostringstream oss;
 
-  oss << "info Key_st: " << __func__ << std::endl
+  oss << "info id = " << id << ", Key_st: " << __func__ << std::endl
       << "b6Val = " << static_cast<uint32_t>(key.b6Val) << std::endl
       << "b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+  bool loop_mode = false;
+
+  // Parse command-line arguments
+  for (int i = 1; i < argc; ++i)
+  {
+    std::string arg = argv[i];
+    if (arg == "-l")
+    {
+      loop_mode = true;
+    }
+  }
+
   auto ret = init_uart();
   if (ret != 0)
   {
@@ -126,7 +148,8 @@ int main()
   int j                     = 0;
 
   auto time_start = get_time_now_ms();
-  for (int try_idx = 0, get_idx = 0; (try_idx < kTryCnt) && (get_idx < kGetCnt); try_idx++)
+  for (int try_idx = 0, get_idx = 0; loop_mode || (try_idx < kTryCnt) && (get_idx < kGetCnt);
+       try_idx++)
   {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0)
@@ -144,7 +167,19 @@ int main()
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0)
     {
-      if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
+      if ((j == RPT_STATUS_BUMPER_ID) && struct_size <= sizeof(Sensor_u))
+      {
+        Sensor_u sensor = {};
+        memcpy(&sensor, structp, struct_size);
+        print_Sensor_u(j, sensor);
+      }
+      else if ((j == RPT_STATUS_DROP_ID) && struct_size <= sizeof(Sensor_u))
+      {
+        Sensor_u sensor = {};
+        memcpy(&sensor, structp, struct_size);
+        print_Sensor_u(j, sensor);
+      }
+      else if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
       {
         McuGyroOdo_st mcu_info = {0};
         memcpy(&mcu_info, structp, struct_size);
@@ -158,32 +193,32 @@ int main()
             __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
-        print_McuGyroOdo_st(mcu_info);
+        print_McuGyroOdo_st(j, mcu_info);
         break;
       }
       else if (j == RPT_MCU_SENSOR_ID && struct_size <= sizeof(McuSensor_st))
       {
         McuSensor_st mcu_sensor = {};
         memcpy(&mcu_sensor, structp, struct_size);
-        print_McuSensor_st(mcu_sensor);
+        print_McuSensor_st(j, mcu_sensor);
       }
       else if (j == RPT_MCU_KEY_ID && struct_size <= sizeof(McuKey_st))
       {
         McuKey_st mcu_key = {};
         memcpy(&mcu_key, structp, struct_size);
-        print_McuKey_st(mcu_key);
+        print_McuKey_st(j, mcu_key);
       }
       else if (j == RPT_MCU_STATE_ID && struct_size <= sizeof(McuState_st))
       {
         McuState_st mcu_state = {};
         memcpy(&mcu_state, structp, struct_size);
-        print_McuState_st(mcu_state);
+        print_McuState_st(j, mcu_state);
       }
       else if ((j == RPT_KEY_ID) && (struct_size <= sizeof(Key_st)))
       {
         Key_st key = {};
         memcpy(&key, structp, struct_size);
-        print_Key_st(key);
+        print_Key_st(j, key);
       }
       else
       {
