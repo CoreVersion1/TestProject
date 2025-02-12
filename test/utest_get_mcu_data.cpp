@@ -185,6 +185,11 @@ int main()
         memcpy(&key, structp, struct_size);
         print_Key_st(key);
       }
+      else
+      {
+        std::cout << "[warn] unrecognized ID=" << std::showbase << std::uppercase << std::hex << j
+                  << std::endl;
+      }
     }
   }
 
