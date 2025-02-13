@@ -5,110 +5,13 @@
 
 #include "Common/Common.hpp"
 #include "roborock.symlink/rda_headers.h"
+#include "Roborock/Roborock.hpp"
 
 using namespace TestProject;
 
 const int kTryCnt   = 300;
 const int kGetCnt   = 50;
 const int kBuffSize = 4096;
-
-void print_Sensor_u(const int &id, const Sensor_u &sensor)
-{
-  std::ostringstream oss;
-
-  oss << "info id = " << id << ", Sensor_u: " << __func__ << std::endl
-      << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
-
-void print_McuGyroOdo_st(const int &id, const McuGyroOdo_st &mcu_info)
-{
-  std::ostringstream oss;
-
-  // 输出时间戳
-  oss << "info id = " << id << ", McuGyroOdo_st: " << __func__ << std::endl
-      << "time_stamp = " << mcu_info.time_stamp << std::endl;
-
-  // 输出加速度
-  oss << "acc =";
-  for (int i = 0; i < 3; ++i)
-  {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.acc[i];
-  }
-  oss << std::endl;
-
-  // 输出陀螺仪
-  oss << "gyro =";
-  for (int i = 0; i < 3; ++i)
-  {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.gyro[i];
-  }
-  oss << std::endl;
-
-  // 输出四元数
-  oss << "quat =";
-  for (int i = 0; i < 4; ++i)
-  {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.quat[i];
-  }
-  oss << std::endl;
-
-  // 打印结果
-  std::cout << oss.str() << std::endl;
-}
-
-void print_McuSensor_st(const int &id, const McuSensor_st &mcu_sensor)
-{
-  std::ostringstream oss;
-
-  oss << "info id = " << id << ", McuSensor_st: " << __func__ << std::endl
-      << "emergent_stop = " << mcu_sensor.emergent_stop << std::endl
-      << "bumper_left = " << mcu_sensor.bumper_left << std::endl
-      << "bumper_right = " << mcu_sensor.bumper_right << std::endl
-      << "lift_left = " << mcu_sensor.lift_left << std::endl
-      << "lift_right = " << mcu_sensor.lift_right << std::endl
-      << "pose_tilt = " << mcu_sensor.pose_tilt << std::endl
-      << "pose_flip = " << mcu_sensor.pose_flip << std::endl
-      << "env_grass = " << mcu_sensor.env_grass << std::endl
-      << "env_rain = " << mcu_sensor.env_rain << std::endl
-      << "resv = " << mcu_sensor.resv << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
-
-void print_McuKey_st(const int &id, const McuKey_st &mcu_key)
-{
-  std::ostringstream oss;
-
-  oss << "info id = " << id << ", McuKey_st: " << __func__ << std::endl
-      << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
-
-void print_McuState_st(const int &id, const McuState_st &mcu_state)
-{
-  std::ostringstream oss;
-
-  oss << "info id = " << id << ", McuState_st: " << __func__ << std::endl
-      << "state = " << mcu_state.state << std::endl
-      << "battery_percent = " << static_cast<uint32_t>(mcu_state.battery_percent) << std::endl
-      << "error = " << mcu_state.error << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
-
-void print_Key_st(const int &id, const Key_st &key)
-{
-  std::ostringstream oss;
-
-  oss << "info id = " << id << ", Key_st: " << __func__ << std::endl
-      << "b6Val = " << static_cast<uint32_t>(key.b6Val) << std::endl
-      << "b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
 
 int main(int argc, char *argv[])
 {

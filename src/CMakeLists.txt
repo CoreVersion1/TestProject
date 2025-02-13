@@ -1,9 +1,11 @@
 add_subdirectory(SerialPort)
 add_subdirectory(Common)
+add_subdirectory(Roborock)
 
 set(Objects_List
     $<TARGET_OBJECTS:SerialPort>
     $<TARGET_OBJECTS:Common>
+    $<TARGET_OBJECTS:Roborock>
 )
 
 if(STATIC_LINK)
