@@ -1,6 +1,4 @@
-#include <iomanip>
 #include <iostream>
-#include <sstream>
 #include <thread>
 
 #include "Common/Common.hpp"
@@ -70,23 +68,11 @@ int main(int argc, char *argv[])
 
     while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0)
     {
-      if ((j == RPT_STATUS_BUMPER_ID) && struct_size <= sizeof(Sensor_u))
-      {
-        Sensor_u sensor = {};
-        memcpy(&sensor, structp, struct_size);
-        PrintProtocolData(j, sensor);
-      }
-      else if ((j == RPT_STATUS_DROP_ID) && struct_size <= sizeof(Sensor_u))
-      {
-        Sensor_u sensor = {};
-        memcpy(&sensor, structp, struct_size);
-        PrintProtocolData(j, sensor);
-      }
-      else if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
-      {
-        McuGyroOdo_st mcu_info = {0};
-        memcpy(&mcu_info, structp, struct_size);
+      handle_protocol_data(j, structp, struct_size);
 
+      // 计算频率
+      if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
+      {
         auto time_now = get_time_now_ms();
         auto frq      = (1 * 1000.0) / (time_now - time_start);
         time_start    = time_now;
@@ -96,32 +82,7 @@ int main(int argc, char *argv[])
             __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
-        PrintProtocolData(j, mcu_info);
         break;
-      }
-      else if (j == RPT_MCU_SENSOR_ID && struct_size <= sizeof(McuSensor_st))
-      {
-        McuSensor_st mcu_sensor = {};
-        memcpy(&mcu_sensor, structp, struct_size);
-        PrintProtocolData(j, mcu_sensor);
-      }
-      else if (j == RPT_MCU_KEY_ID && struct_size <= sizeof(McuKey_st))
-      {
-        McuKey_st mcu_key = {};
-        memcpy(&mcu_key, structp, struct_size);
-        PrintProtocolData(j, mcu_key);
-      }
-      else if (j == RPT_MCU_STATE_ID && struct_size <= sizeof(McuState_st))
-      {
-        McuState_st mcu_state = {};
-        memcpy(&mcu_state, structp, struct_size);
-        PrintProtocolData(j, mcu_state);
-      }
-      else if ((j == RPT_KEY_ID) && (struct_size <= sizeof(Key_st)))
-      {
-        Key_st key = {};
-        memcpy(&key, structp, struct_size);
-        PrintProtocolData(j, key);
       }
       else
       {

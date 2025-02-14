@@ -3,11 +3,21 @@
 #pragma once
 
 namespace TestProject {
-void PrintProtocolData(const int &id, const Sensor_u &sensor);
-void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info);
-void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor);
-void PrintProtocolData(const int &id, const McuKey_st &mcu_key);
-void PrintProtocolData(const int &id, const McuState_st &mcu_state);
-void PrintProtocolData(const int &id, const Key_st &key);
+
+template <typename T>
+void PrintProtocolData(const int &id, const T &data);
+
+template <typename T>
+void process_data(int j, const void *structp, size_t struct_size)
+{
+  if (struct_size <= sizeof(T))
+  {
+    T data = {};
+    memcpy(&data, structp, struct_size);
+    PrintProtocolData(j, data);
+  }
+}
+
+void handle_protocol_data(int id, const void *data, size_t size);
 
 }  // namespace TestProject

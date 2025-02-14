@@ -2,9 +2,12 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <unordered_map>
+#include <functional>
 
 #include "Common/Common.hpp"
 #include "roborock.symlink/rda_headers.h"
+#include "Roborock/Roborock.hpp"
 
 namespace TestProject {
 
@@ -16,6 +19,7 @@ std::string PrintID(const int &id, const std::string &name)
   return oss.str();
 }
 
+template <>
 void PrintProtocolData(const int &id, const Sensor_u &sensor)
 {
   std::ostringstream oss;
@@ -26,6 +30,7 @@ void PrintProtocolData(const int &id, const Sensor_u &sensor)
   std::cout << oss.str() << std::endl;
 }
 
+template <>
 void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 {
   std::ostringstream oss;
@@ -62,6 +67,7 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
   std::cout << oss.str() << std::endl;
 }
 
+template <>
 void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 {
   std::ostringstream oss;
@@ -76,6 +82,7 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
   std::cout << oss.str() << std::endl;
 }
 
+template <>
 void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
 {
   std::ostringstream oss;
@@ -86,6 +93,7 @@ void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
   std::cout << oss.str() << std::endl;
 }
 
+template <>
 void PrintProtocolData(const int &id, const McuState_st &mcu_state)
 {
   std::ostringstream oss;
@@ -97,6 +105,7 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
   std::cout << oss.str() << std::endl;
 }
 
+template <>
 void PrintProtocolData(const int &id, const Key_st &key)
 {
   std::ostringstream oss;
@@ -105,6 +114,26 @@ void PrintProtocolData(const int &id, const Key_st &key)
       << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
 
   std::cout << oss.str() << std::endl;
+}
+
+void handle_protocol_data(int id, const void *data, size_t size)
+{
+  static std::unordered_map<int, std::function<void()>> handler_map = {
+      {RPT_KEY_ID, [id, data, size]() { process_data<Key_st>(id, data, size); }},
+      {RPT_STATUS_BUMPER_ID, [id, data, size]() { process_data<Sensor_u>(id, data, size); }},
+      {RPT_STATUS_DROP_ID, [id, data, size]() { process_data<Sensor_u>(id, data, size); }},
+      {RPT_MCU_POSE_MOTOR_ID, [id, data, size]() { process_data<McuGyroOdo_st>(id, data, size); }},
+      {RPT_MCU_SENSOR_ID, [id, data, size]() { process_data<McuSensor_st>(id, data, size); }},
+      {RPT_MCU_KEY_ID, [id, data, size]() { process_data<McuKey_st>(id, data, size); }},
+      {RPT_MCU_STATE_ID, [id, data, size]() { process_data<McuState_st>(id, data, size); }},
+  };
+
+  // 查找并执行处理函数
+  auto it = handler_map.find(id);
+  if (it != handler_map.end())
+  {
+    it->second();  // 调用相应的处理函数
+  }
 }
 
 }  // namespace TestProject
