@@ -20,6 +20,17 @@ std::string PrintID(const int &id, const std::string &name)
 }
 
 template <>
+void PrintProtocolData(const int &id, const Key_st &key)
+{
+  std::ostringstream oss;
+
+  oss << "info " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
+      << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+template <>
 void PrintProtocolData(const int &id, const Sensor_u &sensor)
 {
   std::ostringstream oss;
@@ -101,17 +112,6 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
   oss << "info " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
       << ", battery_percent = " << static_cast<uint32_t>(mcu_state.battery_percent)
       << ", error = " << mcu_state.error << std::endl;
-
-  std::cout << oss.str() << std::endl;
-}
-
-template <>
-void PrintProtocolData(const int &id, const Key_st &key)
-{
-  std::ostringstream oss;
-
-  oss << "info " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
-      << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
