@@ -74,13 +74,13 @@ int main(int argc, char *argv[])
       {
         Sensor_u sensor = {};
         memcpy(&sensor, structp, struct_size);
-        print_Sensor_u(j, sensor);
+        PrintProtocolData(j, sensor);
       }
       else if ((j == RPT_STATUS_DROP_ID) && struct_size <= sizeof(Sensor_u))
       {
         Sensor_u sensor = {};
         memcpy(&sensor, structp, struct_size);
-        print_Sensor_u(j, sensor);
+        PrintProtocolData(j, sensor);
       }
       else if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
       {
@@ -96,37 +96,36 @@ int main(int argc, char *argv[])
             __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
-        print_McuGyroOdo_st(j, mcu_info);
+        PrintProtocolData(j, mcu_info);
         break;
       }
       else if (j == RPT_MCU_SENSOR_ID && struct_size <= sizeof(McuSensor_st))
       {
         McuSensor_st mcu_sensor = {};
         memcpy(&mcu_sensor, structp, struct_size);
-        print_McuSensor_st(j, mcu_sensor);
+        PrintProtocolData(j, mcu_sensor);
       }
       else if (j == RPT_MCU_KEY_ID && struct_size <= sizeof(McuKey_st))
       {
         McuKey_st mcu_key = {};
         memcpy(&mcu_key, structp, struct_size);
-        print_McuKey_st(j, mcu_key);
+        PrintProtocolData(j, mcu_key);
       }
       else if (j == RPT_MCU_STATE_ID && struct_size <= sizeof(McuState_st))
       {
         McuState_st mcu_state = {};
         memcpy(&mcu_state, structp, struct_size);
-        print_McuState_st(j, mcu_state);
+        PrintProtocolData(j, mcu_state);
       }
       else if ((j == RPT_KEY_ID) && (struct_size <= sizeof(Key_st)))
       {
         Key_st key = {};
         memcpy(&key, structp, struct_size);
-        print_Key_st(j, key);
+        PrintProtocolData(j, key);
       }
       else
       {
-        std::cout << "[warn] unrecognized ID=" << std::showbase << std::uppercase << std::hex << j
-                  << std::endl;
+        std::cout << "[warn] unrecognized ID=0x" << std::uppercase << std::hex << j << std::endl;
       }
     }
   }

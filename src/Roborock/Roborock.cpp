@@ -8,23 +8,31 @@
 
 namespace TestProject {
 
-void print_Sensor_u(const int &id, const Sensor_u &sensor)
+std::string PrintID(const int &id, const std::string &name)
+{
+  std::ostringstream oss;
+  oss << "id = 0x" << std::hex << std::setfill('0') << std::setw(2) << id << std::oct << ", "
+      << name;
+  return oss.str();
+}
+
+void PrintProtocolData(const int &id, const Sensor_u &sensor)
 {
   std::ostringstream oss;
 
-  oss << "info id = " << id << ", Sensor_u: "
+  oss << "info " << PrintID(id, "Key_st") << ", Sensor_u: "
       << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuGyroOdo_st(const int &id, const McuGyroOdo_st &mcu_info)
+void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 {
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "info id = " << id << ", McuGyroOdo_st: "
-      << "time_stamp = " << mcu_info.time_stamp << std::endl;
+  oss << "info " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp
+      << std::endl;
 
   // 输出加速度
   oss << "acc =";
@@ -54,12 +62,11 @@ void print_McuGyroOdo_st(const int &id, const McuGyroOdo_st &mcu_info)
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuSensor_st(const int &id, const McuSensor_st &mcu_sensor)
+void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 {
   std::ostringstream oss;
 
-  oss << "info id = " << id << ", McuSensor_st: "
-      << "emergent_stop = " << mcu_sensor.emergent_stop
+  oss << "info " << PrintID(id, "McuSensor_st") << ": emergent_stop = " << mcu_sensor.emergent_stop
       << ", bumper_left = " << mcu_sensor.bumper_left
       << ", bumper_right = " << mcu_sensor.bumper_right << ", lift_left = " << mcu_sensor.lift_left
       << ", lift_right = " << mcu_sensor.lift_right << ", pose_tilt = " << mcu_sensor.pose_tilt
@@ -69,33 +76,32 @@ void print_McuSensor_st(const int &id, const McuSensor_st &mcu_sensor)
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuKey_st(const int &id, const McuKey_st &mcu_key)
+void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
 {
   std::ostringstream oss;
 
-  oss << "info id = " << id << ", McuKey_st: "
-      << "key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
+  oss << "info " << PrintID(id, "McuKey_st") << ": key = " << static_cast<uint32_t>(mcu_key.key)
+      << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
 
-void print_McuState_st(const int &id, const McuState_st &mcu_state)
+void PrintProtocolData(const int &id, const McuState_st &mcu_state)
 {
   std::ostringstream oss;
 
-  oss << "info id = " << id << ", McuState_st: " << "state = " << mcu_state.state
+  oss << "info " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
       << ", battery_percent = " << static_cast<uint32_t>(mcu_state.battery_percent)
       << ", error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
 
-void print_Key_st(const int &id, const Key_st &key)
+void PrintProtocolData(const int &id, const Key_st &key)
 {
   std::ostringstream oss;
 
-  oss << "info id = " << id << ", Key_st: "
-      << "b6Val = " << static_cast<uint32_t>(key.b6Val)
+  oss << "info " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
       << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
 
   std::cout << oss.str() << std::endl;
