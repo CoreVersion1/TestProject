@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
   char read_buff[kBuffSize] = {0};
-  int j                     = 0;
+  int id                    = 0;
 
   auto time_start = get_time_now_ms();
   for (int try_idx = 0, get_idx = 0; loop_mode || (try_idx < kTryCnt) && (get_idx < kGetCnt);
@@ -66,20 +66,20 @@ int main(int argc, char *argv[])
     char *structp   = nullptr;
     int struct_size = 0;
 
-    while ((j = get_next(&src, &ret, &structp, &struct_size)) > 0)
+    while ((id = get_next(&src, &ret, &structp, &struct_size)) > 0)
     {
-      handle_protocol_data(j, structp, struct_size);
+      handle_protocol_data(id, structp, struct_size);
 
       // 计算频率
-      if ((j == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
+      if ((id == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
       {
         auto time_now = get_time_now_ms();
         auto frq      = (1 * 1000.0) / (time_now - time_start);
         time_start    = time_now;
         std::printf(
-            "%s:Found response, ID=0x%x, size=%d, try_cnt=%d, "
+            "Found response, ID=0x%x, size=%d, try_cnt=%d, "
             "get_index=%d, frq=%.2fHz\n",
-            __func__, j, struct_size, try_idx, get_idx++, frq);
+            id, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
       }
