@@ -4,6 +4,13 @@
 
 namespace TestProject {
 
+/**
+ * @brief 打印协议数据
+ * 
+ * @tparam T 
+ * @param id 
+ * @param data 
+ */
 template <typename T>
 void PrintProtocolData(const int &id, const T &data);
 
