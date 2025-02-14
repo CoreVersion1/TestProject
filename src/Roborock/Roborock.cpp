@@ -136,7 +136,8 @@ void handle_protocol_data(int id, const void *data, size_t size)
   }
   else
   {
-    std::cout << "[warn] unrecognized ID = 0x" << std::uppercase << std::hex << id << std::endl;
+    std::cout << "[warn] unrecognized ID = 0x" << std::uppercase << std::hex << id << std::oct
+              << std::endl;
   }
 }
 
