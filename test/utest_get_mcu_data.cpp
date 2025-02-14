@@ -82,11 +82,6 @@ int main(int argc, char *argv[])
             __func__, j, struct_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
-        break;
-      }
-      else
-      {
-        std::cout << "[warn] unrecognized ID=0x" << std::uppercase << std::hex << j << std::endl;
       }
     }
   }
