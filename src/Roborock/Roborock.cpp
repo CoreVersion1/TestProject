@@ -11,6 +11,24 @@
 
 namespace TestProject {
 
+typedef struct
+{
+  unsigned short u16VolVal;      /* mV   for Battery aging*/
+  unsigned short u16IVal;        /* mA   for Battery aging*/
+  unsigned char u8Soc;           /*0-100*/
+  unsigned char u8ChrgStatus;    /*0: ok, 1: error*/
+  unsigned char u8VolStatus;     /*0: ok, 1: error*/
+  unsigned char u8TmpStatus;     /*0: ok, 1: high temp error, 2: low temp err*/
+  unsigned char u8CurrStatus;    /*0: ok, 1: error*/
+  unsigned char u8ChgTempStatus; /*0: ok, 1: high temp error, 2: low temp err*/
+} Bat_st;
+
+typedef struct
+{
+  unsigned char u8Capx100mAh; /* value x100mAh, 52: 5200mAh*/
+  unsigned char reserved;
+} BatCap_st;
+
 std::string PrintID(const int &id, const std::string &name)
 {
   std::ostringstream oss;
@@ -26,6 +44,36 @@ void PrintProtocolData(const int &id, const Key_st &key)
 
   oss << "info " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
       << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+template <>
+void PrintProtocolData(const int &id, const Bat_st &bat)
+{
+  std::ostringstream oss;
+
+  oss << "info " << PrintID(id, "Bat_st")
+      << ": u16VolVal = " << static_cast<uint32_t>(bat.u16VolVal)
+      << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal)
+      << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
+      << ", u8ChrgStatus = " << static_cast<uint32_t>(bat.u8ChrgStatus)
+      << ", u8VolStatus = " << static_cast<uint32_t>(bat.u8VolStatus)
+      << ", u8TmpStatus = " << static_cast<uint32_t>(bat.u8TmpStatus)
+      << ", u8CurrStatus = " << static_cast<uint32_t>(bat.u8CurrStatus)
+      << ", u8ChgTempStatus = " << static_cast<uint32_t>(bat.u8ChgTempStatus) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+template <>
+void PrintProtocolData(const int &id, const BatCap_st &bat_cap)
+{
+  std::ostringstream oss;
+
+  oss << "info " << PrintID(id, "BatCap_st")
+      << ": u8Capx100mAh = " << static_cast<uint32_t>(bat_cap.u8Capx100mAh)
+      << ", reserved = " << static_cast<uint32_t>(bat_cap.reserved) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -117,6 +165,8 @@ void HandleProtocolData(int id, const void *data, size_t size)
 {
   static std::unordered_map<int, std::function<void()>> handler_map = {
       {RPT_KEY_ID, [&]() { ProcessPackage<Key_st>(id, data, size); }},
+      {RPT_BATTERY_INFO_ID, [&]() { ProcessPackage<Bat_st>(id, data, size); }},
+      {RPT_BAT_CAP_ID, [&]() { ProcessPackage<BatCap_st>(id, data, size); }},
       {RPT_STATUS_BUMPER_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
       {RPT_STATUS_DROP_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
       {RPT_MCU_POSE_MOTOR_ID, [&]() { ProcessPackage<McuGyroOdo_st>(id, data, size); }},
