@@ -24,8 +24,38 @@ void PrintProtocolData(const int &id, const Key_st &key)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
+  oss << "[info] " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
       << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+template <>
+void PrintProtocolData(const int &id, const Bat_st &bat)
+{
+  std::ostringstream oss;
+
+  oss << "[info] " << PrintID(id, "Bat_st")
+      << ": u16VolVal = " << static_cast<uint32_t>(bat.u16VolVal)
+      << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal)
+      << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
+      << ", u8ChrgStatus = " << static_cast<uint32_t>(bat.u8ChrgStatus)
+      << ", u8VolStatus = " << static_cast<uint32_t>(bat.u8VolStatus)
+      << ", u8TmpStatus = " << static_cast<uint32_t>(bat.u8TmpStatus)
+      << ", u8CurrStatus = " << static_cast<uint32_t>(bat.u8CurrStatus)
+      << ", u8ChgTempStatus = " << static_cast<uint32_t>(bat.u8ChgTempStatus) << std::endl;
+
+  std::cout << oss.str() << std::endl;
+}
+
+template <>
+void PrintProtocolData(const int &id, const BatCap_st &bat_cap)
+{
+  std::ostringstream oss;
+
+  oss << "[info] " << PrintID(id, "BatCap_st")
+      << ": u8Capx100mAh = " << static_cast<uint32_t>(bat_cap.u8Capx100mAh)
+      << ", reserved = " << static_cast<uint32_t>(bat_cap.reserved) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -35,7 +65,7 @@ void PrintProtocolData(const int &id, const Sensor_u &sensor)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "Key_st") << ", Sensor_u: "
+  oss << "[info] " << PrintID(id, "Key_st") << ", Sensor_u: "
       << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -47,7 +77,7 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "info " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp
+  oss << "[info] " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp
       << std::endl;
 
   // 输出加速度
@@ -83,7 +113,7 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "McuSensor_st") << ": cut_state = " << mcu_sensor.cut_state
+  oss << "[info] " << PrintID(id, "McuSensor_st") << ": cut_state = " << mcu_sensor.cut_state
       << ", pose_tilt = " << mcu_sensor.pose_tilt << ", pose_flip = " << mcu_sensor.pose_flip
       << ", env_grass = " << mcu_sensor.env_grass << ", env_rain = " << mcu_sensor.env_rain
       << ", resv = " << mcu_sensor.resv << std::endl;
@@ -96,7 +126,7 @@ void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "McuKey_st") << ": key = " << static_cast<uint32_t>(mcu_key.key)
+  oss << "[info] " << PrintID(id, "McuKey_st") << ": key = " << static_cast<uint32_t>(mcu_key.key)
       << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -107,7 +137,7 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
+  oss << "[info] " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
       << ", error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -117,6 +147,8 @@ void HandleProtocolData(int id, const void *data, size_t size)
 {
   static std::unordered_map<int, std::function<void()>> handler_map = {
       {RPT_KEY_ID, [&]() { ProcessPackage<Key_st>(id, data, size); }},
+      {RPT_BATTERY_INFO_ID, [&]() { ProcessPackage<Bat_st>(id, data, size); }},
+      {RPT_BAT_CAP_ID, [&]() { ProcessPackage<BatCap_st>(id, data, size); }},
       {RPT_STATUS_BUMPER_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
       {RPT_STATUS_DROP_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
       {RPT_MCU_POSE_MOTOR_ID, [&]() { ProcessPackage<McuGyroOdo_st>(id, data, size); }},
