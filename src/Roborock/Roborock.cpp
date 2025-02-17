@@ -11,6 +11,24 @@
 
 namespace TestProject {
 
+typedef struct
+{
+  unsigned short u16VolVal;      /* mV   for Battery aging*/
+  unsigned short u16IVal;        /* mA   for Battery aging*/
+  unsigned char u8Soc;           /*0-100*/
+  unsigned char u8ChrgStatus;    /*0: ok, 1: error*/
+  unsigned char u8VolStatus;     /*0: ok, 1: error*/
+  unsigned char u8TmpStatus;     /*0: ok, 1: high temp error, 2: low temp err*/
+  unsigned char u8CurrStatus;    /*0: ok, 1: error*/
+  unsigned char u8ChgTempStatus; /*0: ok, 1: high temp error, 2: low temp err*/
+} Bat_st;
+
+typedef struct
+{
+  unsigned char u8Capx100mAh; /* value x100mAh, 52: 5200mAh*/
+  unsigned char reserved;
+} BatCap_st;
+
 std::string PrintID(const int &id, const std::string &name)
 {
   std::ostringstream oss;
