@@ -62,16 +62,16 @@ int main(int argc, char *argv[])
     }
 
     std::printf("%s:got package, size=%d\n", __func__, ret);
-    char *src       = read_buff;
-    char *structp   = nullptr;
-    int struct_size = 0;
+    char *src     = read_buff;
+    char *data    = nullptr;
+    int data_size = 0;
 
-    while ((id = get_next(&src, &ret, &structp, &struct_size)) > 0)
+    while ((id = get_next(&src, &ret, &data, &data_size)) > 0)
     {
-      HandleProtocolData(id, structp, struct_size);
+      HandleProtocolData(id, data, data_size);
 
       // 计算频率
-      if ((id == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))
+      if ((id == RPT_MCU_POSE_MOTOR_ID) && (data_size <= sizeof(McuGyroOdo_st)))
       {
         auto time_now = get_time_now_ms();
         auto frq      = (1 * 1000.0) / (time_now - time_start);
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         std::printf(
             "Found response, ID=0x%x, size=%d, try_cnt=%d, "
             "get_index=%d, frq=%.2fHz\n",
-            id, struct_size, try_idx, get_idx++, frq);
+            id, data_size, try_idx, get_idx++, frq);
 
         print_time_stamp();
       }
