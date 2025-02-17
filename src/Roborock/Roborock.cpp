@@ -14,8 +14,8 @@ namespace TestProject {
 std::string PrintID(const int &id, const std::string &name)
 {
   std::ostringstream oss;
-  oss << "id = 0x" << std::hex << std::setfill('0') << std::setw(2) << id << std::dec << ", "
-      << name;
+  oss << "id = 0x" << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << id
+      << std::dec << ", " << name;
   return oss.str();
 }
 
@@ -165,7 +165,7 @@ void HandleProtocolData(int id, const void *data, size_t size)
   }
   else
   {
-    std::cout << "[warn] unrecognized ID = 0x" << std::uppercase << std::hex << id << std::dec
+    std::cout << "[warn] unknown ID = 0x" << std::uppercase << std::hex << id << std::dec
               << std::endl;
   }
 }
