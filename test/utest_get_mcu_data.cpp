@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   char read_buff[kBuffSize] = {0};
   int id                    = 0;
 
-  auto time_start = get_time_now_ms();
+  auto time_start = GetTimestampMs();
   for (int try_idx = 0, get_idx = 0; loop_mode || (try_idx < kTryCnt) && (get_idx < kGetCnt);
        try_idx++)
   {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
       // 计算频率
       if ((id == RPT_MCU_POSE_MOTOR_ID) && (data_size <= sizeof(McuGyroOdo_st)))
       {
-        auto time_now = get_time_now_ms();
+        auto time_now = GetTimestampMs();
         auto frq      = (1 * 1000.0) / (time_now - time_start);
         time_start    = time_now;
         std::printf(
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
             "get_index=%d, frq=%.2fHz\n",
             id, data_size, try_idx, get_idx++, frq);
 
-        print_time_stamp();
+        PrintTimestamp();
       }
     }
   }

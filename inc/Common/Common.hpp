@@ -3,6 +3,6 @@
 
 namespace TestProject {
 
-long long get_time_now_ms(void);
-void print_time_stamp();
+long long GetTimestampMs(void);
+void PrintTimestamp();
 }  // namespace TestProject

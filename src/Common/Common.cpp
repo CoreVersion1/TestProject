@@ -7,13 +7,13 @@
 
 namespace TestProject {
 
-long long get_time_now_ms(void)
+long long GetTimestampMs(void)
 {
   auto now = std::chrono::system_clock::now();
   return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 
-void print_time_stamp()
+void PrintTimestamp()
 {
   // 获取当前时间点
   auto now = std::chrono::system_clock::now();
