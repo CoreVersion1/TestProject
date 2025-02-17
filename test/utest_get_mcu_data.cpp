@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
       HandleProtocolData(id, data, data_size);
 
       // 计算频率
-      if ((id == RPT_MCU_POSE_MOTOR_ID) && (data_size <= sizeof(McuGyroOdo_st)))
+      if ((id == RPT_MCU_POSE_MOTOR_ID) && (data_size == sizeof(McuGyroOdo_st)))
       {
         auto time_now = GetTimestampMs();
         auto frq      = (1 * 1000.0) / (time_now - time_start);
