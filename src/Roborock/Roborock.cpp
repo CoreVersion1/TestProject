@@ -83,12 +83,10 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 {
   std::ostringstream oss;
 
-  oss << "info " << PrintID(id, "McuSensor_st") << ": emergent_stop = " << mcu_sensor.emergent_stop
-      << ", bumper_left = " << mcu_sensor.bumper_left
-      << ", bumper_right = " << mcu_sensor.bumper_right << ", lift_left = " << mcu_sensor.lift_left
-      << ", lift_right = " << mcu_sensor.lift_right << ", pose_tilt = " << mcu_sensor.pose_tilt
-      << ", pose_flip = " << mcu_sensor.pose_flip << ", env_grass = " << mcu_sensor.env_grass
-      << ", env_rain = " << mcu_sensor.env_rain << ", resv = " << mcu_sensor.resv << std::endl;
+  oss << "info " << PrintID(id, "McuSensor_st") << ": cut_state = " << mcu_sensor.cut_state
+      << ", pose_tilt = " << mcu_sensor.pose_tilt << ", pose_flip = " << mcu_sensor.pose_flip
+      << ", env_grass = " << mcu_sensor.env_grass << ", env_rain = " << mcu_sensor.env_rain
+      << ", resv = " << mcu_sensor.resv << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -110,7 +108,6 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
   std::ostringstream oss;
 
   oss << "info " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
-      << ", battery_percent = " << static_cast<uint32_t>(mcu_state.battery_percent)
       << ", error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
