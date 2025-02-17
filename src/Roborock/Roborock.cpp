@@ -14,7 +14,7 @@ namespace TestProject {
 std::string PrintID(const int &id, const std::string &name)
 {
   std::ostringstream oss;
-  oss << "id = 0x" << std::hex << std::setfill('0') << std::setw(2) << id << std::oct << ", "
+  oss << "id = 0x" << std::hex << std::setfill('0') << std::setw(2) << id << std::dec << ", "
       << name;
   return oss.str();
 }
@@ -119,13 +119,13 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
 void handle_protocol_data(int id, const void *data, size_t size)
 {
   static std::unordered_map<int, std::function<void()>> handler_map = {
-      {RPT_KEY_ID, [id, data, size]() { process_data<Key_st>(id, data, size); }},
-      {RPT_STATUS_BUMPER_ID, [id, data, size]() { process_data<Sensor_u>(id, data, size); }},
-      {RPT_STATUS_DROP_ID, [id, data, size]() { process_data<Sensor_u>(id, data, size); }},
-      {RPT_MCU_POSE_MOTOR_ID, [id, data, size]() { process_data<McuGyroOdo_st>(id, data, size); }},
-      {RPT_MCU_SENSOR_ID, [id, data, size]() { process_data<McuSensor_st>(id, data, size); }},
-      {RPT_MCU_KEY_ID, [id, data, size]() { process_data<McuKey_st>(id, data, size); }},
-      {RPT_MCU_STATE_ID, [id, data, size]() { process_data<McuState_st>(id, data, size); }},
+      {RPT_KEY_ID, [&]() { process_data<Key_st>(id, data, size); }},
+      {RPT_STATUS_BUMPER_ID, [&]() { process_data<Sensor_u>(id, data, size); }},
+      {RPT_STATUS_DROP_ID, [&]() { process_data<Sensor_u>(id, data, size); }},
+      {RPT_MCU_POSE_MOTOR_ID, [&]() { process_data<McuGyroOdo_st>(id, data, size); }},
+      {RPT_MCU_SENSOR_ID, [&]() { process_data<McuSensor_st>(id, data, size); }},
+      {RPT_MCU_KEY_ID, [&]() { process_data<McuKey_st>(id, data, size); }},
+      {RPT_MCU_STATE_ID, [&]() { process_data<McuState_st>(id, data, size); }},
   };
 
   // 查找并执行处理函数
@@ -136,7 +136,7 @@ void handle_protocol_data(int id, const void *data, size_t size)
   }
   else
   {
-    std::cout << "[warn] unrecognized ID = 0x" << std::uppercase << std::hex << id << std::oct
+    std::cout << "[warn] unrecognized ID = 0x" << std::uppercase << std::hex << id << std::dec
               << std::endl;
   }
 }
