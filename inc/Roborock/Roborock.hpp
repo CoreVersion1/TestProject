@@ -15,7 +15,7 @@ template <typename T>
 void PrintProtocolData(const int &id, const T &data);
 
 template <typename T>
-void process_data(int j, const void *structp, size_t struct_size)
+void ProcessPackage(int j, const void *structp, size_t struct_size)
 {
   if (struct_size <= sizeof(T))
   {
@@ -25,6 +25,6 @@ void process_data(int j, const void *structp, size_t struct_size)
   }
 }
 
-void handle_protocol_data(int id, const void *data, size_t size);
+void HandleProtocolData(int id, const void *data, size_t size);
 
 }  // namespace TestProject

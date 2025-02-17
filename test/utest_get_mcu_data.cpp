@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
     while ((id = get_next(&src, &ret, &structp, &struct_size)) > 0)
     {
-      handle_protocol_data(id, structp, struct_size);
+      HandleProtocolData(id, structp, struct_size);
 
       // 计算频率
       if ((id == RPT_MCU_POSE_MOTOR_ID) && (struct_size <= sizeof(McuGyroOdo_st)))

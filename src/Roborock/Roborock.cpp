@@ -116,16 +116,16 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
   std::cout << oss.str() << std::endl;
 }
 
-void handle_protocol_data(int id, const void *data, size_t size)
+void HandleProtocolData(int id, const void *data, size_t size)
 {
   static std::unordered_map<int, std::function<void()>> handler_map = {
-      {RPT_KEY_ID, [&]() { process_data<Key_st>(id, data, size); }},
-      {RPT_STATUS_BUMPER_ID, [&]() { process_data<Sensor_u>(id, data, size); }},
-      {RPT_STATUS_DROP_ID, [&]() { process_data<Sensor_u>(id, data, size); }},
-      {RPT_MCU_POSE_MOTOR_ID, [&]() { process_data<McuGyroOdo_st>(id, data, size); }},
-      {RPT_MCU_SENSOR_ID, [&]() { process_data<McuSensor_st>(id, data, size); }},
-      {RPT_MCU_KEY_ID, [&]() { process_data<McuKey_st>(id, data, size); }},
-      {RPT_MCU_STATE_ID, [&]() { process_data<McuState_st>(id, data, size); }},
+      {RPT_KEY_ID, [&]() { ProcessPackage<Key_st>(id, data, size); }},
+      {RPT_STATUS_BUMPER_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
+      {RPT_STATUS_DROP_ID, [&]() { ProcessPackage<Sensor_u>(id, data, size); }},
+      {RPT_MCU_POSE_MOTOR_ID, [&]() { ProcessPackage<McuGyroOdo_st>(id, data, size); }},
+      {RPT_MCU_SENSOR_ID, [&]() { ProcessPackage<McuSensor_st>(id, data, size); }},
+      {RPT_MCU_KEY_ID, [&]() { ProcessPackage<McuKey_st>(id, data, size); }},
+      {RPT_MCU_STATE_ID, [&]() { ProcessPackage<McuState_st>(id, data, size); }},
   };
 
   // 查找并执行处理函数
