@@ -1,9 +1,19 @@
 #include "roborock.symlink/rda_headers.h"
 #include <iostream>
+#include <string>
 
 #pragma once
 
 namespace TestProject {
+
+/**
+ * @brief 打印协议ID+结构体名称
+ *
+ * @param id
+ * @param name
+ * @return std::string
+ */
+std::string PrintID(const int &id, const std::string &name);
 
 /**
  * @brief 打印协议数据
@@ -17,24 +27,25 @@ void PrintProtocolData(const int &id, const T &data);
 
 /**
  * @brief 处理协议数据包
- * 
- * @tparam T 
- * @param j 
- * @param structp 
- * @param struct_size 
+ *
+ * @tparam T
+ * @param id
+ * @param structp
+ * @param struct_size
  */
 template <typename T>
-void ProcessPackage(int j, const void *structp, size_t struct_size)
+void ProcessPackage(int id, const void *structp, size_t struct_size)
 {
   if (struct_size == sizeof(T))
   {
     T data = {};
     memcpy(&data, structp, struct_size);
-    PrintProtocolData(j, data);
+    PrintProtocolData(id, data);
   }
   else
   {
-    std::cout << "[error] wrong size! data_size = " << struct_size
+    using std::literals::operator""s;
+    std::cout << "[error] " << PrintID(id, "unknown"s) << ": wrong size! data_size = " << struct_size
               << " --> target_size = " << sizeof(T) << std::endl;
   }
 }
