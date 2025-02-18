@@ -95,32 +95,31 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "[info] " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp
-      << std::endl;
+  oss << "[info] " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp;
 
   // 输出加速度
-  oss << "acc =";
+  oss << ", acc = [";
   for (int i = 0; i < 3; ++i)
   {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.acc[i];
+    oss << std::fixed << std::setprecision(4) << mcu_info.acc[i] << ",";
   }
-  oss << std::endl;
+  oss << "]";
 
   // 输出陀螺仪
-  oss << "gyro =";
+  oss << ", gyro = [";
   for (int i = 0; i < 3; ++i)
   {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.gyro[i];
+    oss << std::fixed << std::setprecision(4) << mcu_info.gyro[i] << ",";
   }
-  oss << std::endl;
+  oss << "]";
 
   // 输出四元数
-  oss << "quat =";
+  oss << ", quat = [";
   for (int i = 0; i < 4; ++i)
   {
-    oss << " " << std::fixed << std::setprecision(4) << mcu_info.quat[i];
+    oss << std::fixed << std::setprecision(4) << mcu_info.quat[i] << ",";
   }
-  oss << std::endl;
+  oss << "]";
 
   // 打印结果
   std::cout << oss.str() << std::endl;

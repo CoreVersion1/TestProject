@@ -55,13 +55,13 @@ int main(int argc, char *argv[])
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0)
     {
-      std::cout << "get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
+      std::cout << "[warn] get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
                 << ", get_idx = " << get_idx << std::endl;
-      std::this_thread::sleep_for(std::chrono::microseconds(1));
+      std::this_thread::sleep_for(std::chrono::microseconds(100));
       continue;
     }
 
-    std::printf("%s:got package, size=%d\n", __func__, ret);
+    std::printf("[info] got package, size=%d\n", ret);
     char *src     = read_buff;
     char *data    = nullptr;
     int data_size = 0;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         auto frq      = (1 * 1000.0) / (time_now - time_start);
         time_start    = time_now;
         std::printf(
-            "Found response, ID=0x%x, size=%d, try_cnt=%d, "
+            "[info] Found response, ID=0x%x, size=%d, try_cnt=%d, "
             "get_index=%d, frq=%.2fHz\n",
             id, data_size, try_idx, get_idx++, frq);
 
