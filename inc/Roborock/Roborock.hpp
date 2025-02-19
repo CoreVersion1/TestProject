@@ -1,6 +1,7 @@
 #include "roborock.symlink/rda_headers.h"
 #include <iostream>
 #include <string>
+#include "Common/Common.hpp"
 
 #pragma once
 
@@ -45,8 +46,10 @@ void ProcessPackage(int id, const void *structp, size_t struct_size)
   else
   {
     using std::literals::operator""s;
-    std::cout << "[error] " << PrintID(id, "unknown"s) << ": wrong size! data_size = " << struct_size
-              << " --> target_size = " << sizeof(T) << std::endl;
+    std::cout << "[error] " << PrintID(id, "unknown"s)
+              << ": wrong size! data_size = " << struct_size << " --> target_size = " << sizeof(T)
+              << ", [info] hexdump[" << struct_size << "]: " << HexToString(structp, struct_size)
+              << std::endl;
   }
 }
 
