@@ -30,4 +30,16 @@ void PrintTimestamp()
             << std::setfill('0') << std::setw(3) << millis << std::endl;
 }
 
+std::string HexToString(const void* data, size_t size)
+{
+  std::stringstream ss;
+  for (size_t i = 0; i < size; i++)
+  {
+    ss << std::uppercase << std::hex << std::setfill('0') << std::setw(2)
+       << static_cast<uint32_t>(static_cast<const uint8_t*>(data)[i]) << " ";
+  }
+
+  return ss.str();
+}
+
 }  // namespace TestProject
