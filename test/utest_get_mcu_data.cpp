@@ -33,21 +33,20 @@ int main(int argc, char *argv[])
   clean_uart();
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  char read_buff[kBuffSize] = {0};
-  int id                    = 0;
-
-  for (int try_idx = 0; loop_mode || (try_idx < kTryCnt); try_idx++)
+  for (int idx = 0; loop_mode || (idx < kTryCnt); idx++)
   {
+    static char read_buff[kBuffSize] = {0};
+
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0)
     {
-      std::cout << "[warn] get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
-                << std::endl;
-      std::this_thread::sleep_for(std::chrono::microseconds(100));
+      std::cout << "[warn] get_package fail, try_idx = " << idx + 1 << "/" << kTryCnt << std::endl;
+      std::this_thread::sleep_for(std::chrono::microseconds(1));
       continue;
     }
 
     std::cout << "[info] got package, size = " << ret << std::endl;
+    int id        = 0;
     char *src     = read_buff;
     char *data    = nullptr;
     int data_size = 0;
