@@ -50,13 +50,6 @@ float TimeImpl::CalcFreq(int64_t time_diff_ms)
 
 float TimeImpl::CalcFreq(int64_t last_time_ms, int64_t now_time_ms)
 {
-  if (now_time_ms <= last_time_ms)
-  {
-    // throw std::invalid_argument("Current time must be greater than last time. " + std::to_string(now_time_ms) + " > " +
-    //                             std::to_string(last_time_ms));
-    return 0;
-  }
-
   return CalcFreq(now_time_ms - last_time_ms);
 }
 
