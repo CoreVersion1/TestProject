@@ -1,4 +1,3 @@
-#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <thread>
@@ -24,7 +23,7 @@ void PrintProtocolData(const int &id, const Key_st &key)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr()
+  oss << "[info] " << IdToStr(id, "Key_st") << ", frq = " << time_impl.GetFreqStr()
       << ": b6Val = " << static_cast<uint32_t>(key.b6Val) << ", b2Index = " << static_cast<uint32_t>(key.b2Index)
       << std::endl;
 
@@ -37,7 +36,7 @@ void PrintProtocolData(const int &id, const Bat_st &bat)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "Bat_st") << ", freq = " << time_impl.GetFreqStr()
+  oss << "[info] " << IdToStr(id, "Bat_st") << ", frq = " << time_impl.GetFreqStr()
       << ": u16VolVal = " << static_cast<uint32_t>(bat.u16VolVal)
       << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal) << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
       << ", u8ChrgStatus = " << static_cast<uint32_t>(bat.u8ChrgStatus)
@@ -55,7 +54,7 @@ void PrintProtocolData(const int &id, const BatCap_st &bat_cap)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "BatCap_st") << ", freq = " << time_impl.GetFreqStr()
+  oss << "[info] " << IdToStr(id, "BatCap_st") << ", frq = " << time_impl.GetFreqStr()
       << ": u8Capx100mAh = " << static_cast<uint32_t>(bat_cap.u8Capx100mAh)
       << ", reserved = " << static_cast<uint32_t>(bat_cap.reserved) << std::endl;
 
@@ -68,7 +67,7 @@ void PrintProtocolData(const int &id, const Sensor_u &sensor)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr() << ", Sensor_u: "
+  oss << "[info] " << IdToStr(id, "Key_st") << ", frq = " << time_impl.GetFreqStr() << ", Sensor_u: "
       << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -82,33 +81,12 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", freq = " << time_impl.GetFreqStr()
-      << ", freq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp)
-      << ((time_impl.GetFreqLast() < 10) ? ", [error]" : ", ok") << ": time_stamp = " << mcu_info.time_stamp;
-
-  // 输出加速度
-  oss << ", acc = {";
-  for (int i = 0; i < 3; ++i)
-  {
-    oss << std::fixed << std::setprecision(4) << mcu_info.acc[i] << ",";
-  }
-  oss << "}";
-
-  // 输出陀螺仪
-  oss << ", gyro = {";
-  for (int i = 0; i < 3; ++i)
-  {
-    oss << std::fixed << std::setprecision(4) << mcu_info.gyro[i] << ",";
-  }
-  oss << "}";
-
-  // 输出四元数
-  oss << ", quat = {";
-  for (int i = 0; i < 4; ++i)
-  {
-    oss << std::fixed << std::setprecision(4) << mcu_info.quat[i] << ",";
-  }
-  oss << "}";
+  oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", frq = " << time_impl.GetFreqStr()
+      << ", frq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp)
+      << ((time_impl.GetFreqLast() < 10) ? ", [error]" : ", [ok]") << ": time_stamp = " << mcu_info.time_stamp;
+  oss << ", " << ArrToStr(mcu_info.acc, 3, "acc");
+  oss << ", " << ArrToStr(mcu_info.gyro, 3, "gyro");
+  oss << ", " << ArrToStr(mcu_info.quat, 4, "quat");
 
   // 打印结果
   std::cout << oss.str() << std::endl;
@@ -120,7 +98,7 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "McuSensor_st") << ", freq = " << time_impl.GetFreqStr() << ": cut_state = "
+  oss << "[info] " << IdToStr(id, "McuSensor_st") << ", frq = " << time_impl.GetFreqStr() << ": cut_state = "
       << ", pose_tilt = " << mcu_sensor.pose_tilt << ", pose_flip = " << mcu_sensor.pose_flip
       << ", env_grass = " << mcu_sensor.env_grass << ", env_rain = " << mcu_sensor.env_rain
       << ", resv = " << mcu_sensor.resv << std::endl;
@@ -134,7 +112,7 @@ void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "McuKey_st") << ", freq = " << time_impl.GetFreqStr()
+  oss << "[info] " << IdToStr(id, "McuKey_st") << ", frq = " << time_impl.GetFreqStr()
       << ": key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -146,7 +124,7 @@ void PrintProtocolData(const int &id, const McuState_st &mcu_state)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "McuState_st") << ", freq = " << time_impl.GetFreqStr()
+  oss << "[info] " << IdToStr(id, "McuState_st") << ", frq = " << time_impl.GetFreqStr()
       << ": state = " << mcu_state.state << ", error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
