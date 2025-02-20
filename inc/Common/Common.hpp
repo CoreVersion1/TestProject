@@ -35,7 +35,7 @@ std::string ArrToStr(const T* arr, int size, const std::string& name)
 
     if (i < size - 1)
     {
-      oss << ", ";
+      oss << ",";
     }
   }
   oss << "}";
