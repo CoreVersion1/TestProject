@@ -7,8 +7,7 @@
 
 using namespace TestProject;
 
-const int kTryCnt   = 300;
-const int kGetCnt   = 50;
+const int kTryCnt   = 100;
 const int kBuffSize = 4096;
 
 int main(int argc, char *argv[])
@@ -48,20 +47,18 @@ int main(int argc, char *argv[])
   char read_buff[kBuffSize] = {0};
   int id                    = 0;
 
-  auto time_start = GetTimestampMs();
-  for (int try_idx = 0, get_idx = 0; loop_mode || (try_idx < kTryCnt) && (get_idx < kGetCnt);
-       try_idx++)
+  for (int try_idx = 0; loop_mode || (try_idx < kTryCnt); try_idx++)
   {
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0)
     {
       std::cout << "[warn] get_package fail, try_idx = " << try_idx + 1 << "/" << kTryCnt
-                << ", get_idx = " << get_idx << std::endl;
+                << std::endl;
       std::this_thread::sleep_for(std::chrono::microseconds(100));
       continue;
     }
 
-    std::printf("[info] got package, size=%d\n", ret);
+    std::cout << "[info] got package, size = " << ret << std::endl;
     char *src     = read_buff;
     char *data    = nullptr;
     int data_size = 0;
@@ -69,20 +66,6 @@ int main(int argc, char *argv[])
     while ((id = get_next(&src, &ret, &data, &data_size)) > 0)
     {
       HandleProtocolData(id, data, data_size);
-
-      // 计算频率
-      if ((id == RPT_MCU_POSE_MOTOR_ID) && (data_size == sizeof(McuGyroOdo_st)))
-      {
-        auto time_now = GetTimestampMs();
-        auto frq      = (1 * 1000.0) / (time_now - time_start);
-        time_start    = time_now;
-        std::printf(
-            "[info] Found response, ID=0x%x, size=%d, try_cnt=%d, "
-            "get_index=%d, frq=%.2fHz\n",
-            id, data_size, try_idx, get_idx++, frq);
-
-        PrintTimestamp();
-      }
     }
   }
 
