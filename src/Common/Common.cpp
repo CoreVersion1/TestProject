@@ -13,7 +13,7 @@ int64_t GetTimestampMs(void)
   return std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
 }
 
-std::string FormatTimestamp(const int64_t& time_ms)
+std::string FormatTimestamp(const int64_t &time_ms)
 {
   // 将毫秒数转换为秒和毫秒
   std::time_t seconds = time_ms / 1000;
@@ -35,13 +35,13 @@ void PrintTimestamp()
   std::cout << FormatTimestamp(GetTimestampMs()) << std::endl;
 }
 
-std::string HexToString(const void* data, size_t size)
+std::string HexToStr(const void *data, size_t size)
 {
   std::stringstream ss;
   for (size_t i = 0; i < size; i++)
   {
     ss << std::uppercase << std::hex << std::setfill('0') << std::setw(2)
-       << static_cast<uint32_t>(static_cast<const uint8_t*>(data)[i]) << " ";
+       << static_cast<uint32_t>(static_cast<const uint8_t *>(data)[i]) << " ";
   }
 
   return ss.str();
