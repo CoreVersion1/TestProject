@@ -100,10 +100,12 @@ template <>
 void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 {
   static TimeImpl time_impl{};
+  static TimeImpl time_impl_mcu{};
   std::ostringstream oss;
 
   // 输出时间戳
   oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", freq = " << time_impl.GetFreqStr()
+      << ", freq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp)
       << ": time_stamp = " << mcu_info.time_stamp;
 
   // 输出加速度
