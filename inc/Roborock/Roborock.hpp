@@ -48,8 +48,8 @@ void ProcessPackage(int id, const void *structp, size_t struct_size)
     using std::literals::operator""s;
     std::cout << "[error] " << IdToStr(id, "unknown"s)
               << ": wrong size! data_size = " << struct_size << " --> target_size = " << sizeof(T)
-              << ", [info] hexdump[" << struct_size << "]: " << HexToString(structp, struct_size)
-              << std::endl;
+              << ", [info] hexdump[" << struct_size << "]: {" << HexToString(structp, struct_size)
+              << "}" << std::endl;
   }
 }
 
