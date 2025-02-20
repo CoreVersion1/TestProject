@@ -43,6 +43,14 @@ class TimeImpl {
   /**
    * @brief calc freq
    *
+   * @param time_diff_ms
+   * @return float
+   */
+  float CalcFreq(int64_t time_diff_ms);
+
+  /**
+   * @brief calc freq
+   *
    * @param last_time_ms
    * @param now_time_ms
    * @return float
@@ -62,7 +70,14 @@ class TimeImpl {
    *
    * @return float
    */
-  float GetFreq();
+  float GetFreq(void);
+
+  /**
+   * @brief get freq last
+   *
+   * @return float
+   */
+  float GetFreqLast(void);
 
   /**
    * @brief calc freq string
@@ -86,9 +101,17 @@ class TimeImpl {
    *
    * @return std::string
    */
-  std::string GetFreqStr();
+  std::string GetFreqStr(void);
+
+  /**
+   * @brief get freq last string
+   *
+   * @return std::string
+   */
+  std::string GetFreqLastStr(void);
 
  private:
   int64_t last_time_ = 0;
+  int64_t time_diff_ = 0;
 };
 }  // namespace TestProject
