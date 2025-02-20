@@ -89,8 +89,7 @@ int main(int argc, char *argv[])
     ret = get_package(read_buff, sizeof(read_buff));
     if (ret <= 0)
     {
-      std::cout << "[warn] get_package fail, try_idx = " << idx + 1 << "/" << cfg.loop_cnt
-                << std::endl;
+      std::cout << "[warn] get_package fail, try_idx = " << idx + 1 << "/" << cfg.loop_cnt << std::endl;
       std::this_thread::sleep_for(std::chrono::microseconds(1));
       continue;
     }

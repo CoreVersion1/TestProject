@@ -243,7 +243,7 @@ int SerialPort::WaitData_Epoll(int fd, int timeout_ms)
   struct epoll_event events[1];
   int ret = epoll_wait(epoll_fd, events, 1, timeout_ms);  // 等待timeout_ms毫秒
   close(epoll_fd);                                        // 关闭 epoll 实例
-  return ret;  // 返回epoll_wait的结果，用于判断是否有数据
+  return ret;                                             // 返回epoll_wait的结果，用于判断是否有数据
 }
 
 }  // namespace TestProject

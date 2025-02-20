@@ -24,8 +24,7 @@ std::string FormatTimestamp(const int64_t& time_ms)
 
   // 格式化输出时间戳
   std::ostringstream oss;
-  oss << std::put_time(&local_time, "%Y-%m-%d %H:%M:%S") << "." << std::setfill('0') << std::setw(3)
-      << millis;
+  oss << std::put_time(&local_time, "%Y-%m-%d %H:%M:%S") << "." << std::setfill('0') << std::setw(3) << millis;
 
   return oss.str();
 }

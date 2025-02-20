@@ -11,12 +11,10 @@
 #include "Common/TimeImpl.hpp"
 
 namespace TestProject {
-
 std::string IdToStr(const int &id, const std::string &name)
 {
   std::ostringstream oss;
-  oss << "id = 0x" << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << id
-      << std::dec << ", " << name;
+  oss << "id = 0x" << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << id << std::dec << ", " << name;
   return oss.str();
 }
 
@@ -27,8 +25,8 @@ void PrintProtocolData(const int &id, const Key_st &key)
   std::ostringstream oss;
 
   oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr()
-      << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
-      << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
+      << ": b6Val = " << static_cast<uint32_t>(key.b6Val) << ", b2Index = " << static_cast<uint32_t>(key.b2Index)
+      << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -41,8 +39,7 @@ void PrintProtocolData(const int &id, const Bat_st &bat)
 
   oss << "[info] " << IdToStr(id, "Bat_st") << ", freq = " << time_impl.GetFreqStr()
       << ": u16VolVal = " << static_cast<uint32_t>(bat.u16VolVal)
-      << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal)
-      << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
+      << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal) << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
       << ", u8ChrgStatus = " << static_cast<uint32_t>(bat.u8ChrgStatus)
       << ", u8VolStatus = " << static_cast<uint32_t>(bat.u8VolStatus)
       << ", u8TmpStatus = " << static_cast<uint32_t>(bat.u8TmpStatus)
@@ -71,8 +68,7 @@ void PrintProtocolData(const int &id, const Sensor_u &sensor)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr()
-      << ", Sensor_u: "
+  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr() << ", Sensor_u: "
       << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -87,8 +83,7 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 
   // 输出时间戳
   oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", freq = " << time_impl.GetFreqStr()
-      << ", freq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp)
-      << ": time_stamp = " << mcu_info.time_stamp;
+      << ", freq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp) << ": time_stamp = " << mcu_info.time_stamp;
 
   // 输出加速度
   oss << ", acc = {";
@@ -124,8 +119,7 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
   static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << IdToStr(id, "McuSensor_st") << ", freq = " << time_impl.GetFreqStr()
-      << ": cut_state = "
+  oss << "[info] " << IdToStr(id, "McuSensor_st") << ", freq = " << time_impl.GetFreqStr() << ": cut_state = "
       << ", pose_tilt = " << mcu_sensor.pose_tilt << ", pose_flip = " << mcu_sensor.pose_flip
       << ", env_grass = " << mcu_sensor.env_grass << ", env_rain = " << mcu_sensor.env_rain
       << ", resv = " << mcu_sensor.resv << std::endl;
@@ -179,8 +173,7 @@ void HandleProtocolData(int id, const void *data, size_t size)
   }
   else
   {
-    std::cout << "[warn] unknown ID = 0x" << std::uppercase << std::hex << id << std::dec
-              << std::endl;
+    std::cout << "[warn] unknown ID = 0x" << std::uppercase << std::hex << id << std::dec << std::endl;
   }
 }
 
