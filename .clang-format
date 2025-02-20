@@ -116,7 +116,7 @@ BreakAfterJavaFieldAnnotations: false
 BreakStringLiterals: true
 
 # 每行字符的限制，0表示没有限制
-ColumnLimit: 100
+ColumnLimit: 120
 
 CommentPragmas:  '^ IWYU pragma:'
 
