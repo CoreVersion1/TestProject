@@ -41,13 +41,13 @@ class TimeImpl {
   void ClearTimeRecord(void);
 
   /**
-   * @brief get freq
+   * @brief calc freq
    *
    * @param last_time_ms
    * @param now_time_ms
    * @return float
    */
-  float GetFreq(int64_t last_time_ms, int64_t now_time_ms);
+  float CalcFreq(int64_t last_time_ms, int64_t now_time_ms);
 
   /**
    * @brief get freq
@@ -65,13 +65,13 @@ class TimeImpl {
   float GetFreq();
 
   /**
-   * @brief get freq string
+   * @brief calc freq string
    *
    * @param last_time_ms
    * @param now_time_ms
    * @return std::string
    */
-  std::string GetFreqStr(int64_t last_time_ms, int64_t now_time_ms);
+  std::string CalcFreqStr(int64_t last_time_ms, int64_t now_time_ms);
 
   /**
    * @brief get freq string

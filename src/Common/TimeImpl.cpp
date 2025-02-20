@@ -41,7 +41,7 @@ void TimeImpl::ClearTimeRecord()
   last_time_ = 0;
 }
 
-float TimeImpl::GetFreq(int64_t last_time_ms, int64_t now_time_ms)
+float TimeImpl::CalcFreq(int64_t last_time_ms, int64_t now_time_ms)
 {
   if (now_time_ms <= last_time_ms)
   {
@@ -54,9 +54,9 @@ float TimeImpl::GetFreq(int64_t last_time_ms, int64_t now_time_ms)
 
 float TimeImpl::GetFreq(int64_t now_time_ms)
 {
-  auto last_time_ms = last_time_;
-  last_time_        = now_time_ms;
-  return GetFreq(last_time_ms, now_time_ms);
+  auto last_time_ms = GetTimeRecord();
+  SetTimeRecord(now_time_ms);
+  return CalcFreq(last_time_ms, now_time_ms);
 }
 
 float TimeImpl::GetFreq()
@@ -65,10 +65,10 @@ float TimeImpl::GetFreq()
   return GetFreq(now_time_ms);
 }
 
-std::string TimeImpl::GetFreqStr(int64_t last_time_ms, int64_t now_time_ms)
+std::string TimeImpl::CalcFreqStr(int64_t last_time_ms, int64_t now_time_ms)
 {
   std::ostringstream oss;
-  oss << std::fixed << std::setprecision(2) << GetFreq(last_time_ms, now_time_ms) << "Hz";
+  oss << std::fixed << std::setprecision(2) << CalcFreq(last_time_ms, now_time_ms) << "Hz";
   return oss.str();
 }
 
