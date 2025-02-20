@@ -64,4 +64,11 @@ float TimeImpl::GetFreq()
   int64_t now_time_ms = Now();
   return GetFreq(now_time_ms);
 }
+
+std::string TimeImpl::GetFreqStr()
+{
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2) << GetFreq() << "Hz";
+  return oss.str();
+}
 }  // namespace TestProject

@@ -64,6 +64,13 @@ class TimeImpl {
    */
   float GetFreq();
 
+  /**
+   * @brief get freq string
+   *
+   * @return std::string
+   */
+  std::string GetFreqStr();
+
  private:
   int64_t last_time_ = 0;
 };
