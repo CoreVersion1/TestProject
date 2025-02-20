@@ -14,7 +14,7 @@ namespace TestProject {
  * @param name
  * @return std::string
  */
-std::string PrintID(const int &id, const std::string &name);
+std::string IdToStr(const int &id, const std::string &name);
 
 /**
  * @brief 打印协议数据
@@ -46,7 +46,7 @@ void ProcessPackage(int id, const void *structp, size_t struct_size)
   else
   {
     using std::literals::operator""s;
-    std::cout << "[error] " << PrintID(id, "unknown"s)
+    std::cout << "[error] " << IdToStr(id, "unknown"s)
               << ": wrong size! data_size = " << struct_size << " --> target_size = " << sizeof(T)
               << ", [info] hexdump[" << struct_size << "]: " << HexToString(structp, struct_size)
               << std::endl;

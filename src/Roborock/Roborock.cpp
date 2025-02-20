@@ -8,6 +8,7 @@
 #include "Common/Common.hpp"
 #include "roborock.symlink/rda_headers.h"
 #include "Roborock/Roborock.hpp"
+#include "Common/TimeImpl.hpp"
 
 namespace TestProject {
 
@@ -29,7 +30,7 @@ typedef struct
   unsigned char reserved;
 } BatCap_st;
 
-std::string PrintID(const int &id, const std::string &name)
+std::string IdToStr(const int &id, const std::string &name)
 {
   std::ostringstream oss;
   oss << "id = 0x" << std::uppercase << std::hex << std::setfill('0') << std::setw(4) << id
@@ -40,9 +41,11 @@ std::string PrintID(const int &id, const std::string &name)
 template <>
 void PrintProtocolData(const int &id, const Key_st &key)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "Key_st") << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
+  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr()
+      << ": b6Val = " << static_cast<uint32_t>(key.b6Val)
       << ", b2Index = " << static_cast<uint32_t>(key.b2Index) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -51,9 +54,10 @@ void PrintProtocolData(const int &id, const Key_st &key)
 template <>
 void PrintProtocolData(const int &id, const Bat_st &bat)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "Bat_st")
+  oss << "[info] " << IdToStr(id, "Bat_st") << ", freq = " << time_impl.GetFreqStr()
       << ": u16VolVal = " << static_cast<uint32_t>(bat.u16VolVal)
       << ", u16IVal = " << static_cast<uint32_t>(bat.u16IVal)
       << ", u8Soc = " << static_cast<uint32_t>(bat.u8Soc)
@@ -69,9 +73,10 @@ void PrintProtocolData(const int &id, const Bat_st &bat)
 template <>
 void PrintProtocolData(const int &id, const BatCap_st &bat_cap)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "BatCap_st")
+  oss << "[info] " << IdToStr(id, "BatCap_st") << ", freq = " << time_impl.GetFreqStr()
       << ": u8Capx100mAh = " << static_cast<uint32_t>(bat_cap.u8Capx100mAh)
       << ", reserved = " << static_cast<uint32_t>(bat_cap.reserved) << std::endl;
 
@@ -81,9 +86,11 @@ void PrintProtocolData(const int &id, const BatCap_st &bat_cap)
 template <>
 void PrintProtocolData(const int &id, const Sensor_u &sensor)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "Key_st") << ", Sensor_u: "
+  oss << "[info] " << IdToStr(id, "Key_st") << ", freq = " << time_impl.GetFreqStr()
+      << ", Sensor_u: "
       << "u16Val = " << static_cast<uint32_t>(sensor.u16Val) << std::endl;
 
   std::cout << oss.str() << std::endl;
@@ -92,10 +99,12 @@ void PrintProtocolData(const int &id, const Sensor_u &sensor)
 template <>
 void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
   // 输出时间戳
-  oss << "[info] " << PrintID(id, "McuGyroOdo_st") << ": time_stamp = " << mcu_info.time_stamp;
+  oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", freq = " << time_impl.GetFreqStr()
+      << ": time_stamp = " << mcu_info.time_stamp;
 
   // 输出加速度
   oss << ", acc = [";
@@ -128,9 +137,11 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
 template <>
 void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "McuSensor_st") << ": cut_state = " << mcu_sensor.cut_state
+  oss << "[info] " << IdToStr(id, "McuSensor_st") << ", freq = " << time_impl.GetFreqStr()
+      << ": cut_state = "
       << ", pose_tilt = " << mcu_sensor.pose_tilt << ", pose_flip = " << mcu_sensor.pose_flip
       << ", env_grass = " << mcu_sensor.env_grass << ", env_rain = " << mcu_sensor.env_rain
       << ", resv = " << mcu_sensor.resv << std::endl;
@@ -141,10 +152,11 @@ void PrintProtocolData(const int &id, const McuSensor_st &mcu_sensor)
 template <>
 void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "McuKey_st") << ": key = " << static_cast<uint32_t>(mcu_key.key)
-      << std::endl;
+  oss << "[info] " << IdToStr(id, "McuKey_st") << ", freq = " << time_impl.GetFreqStr()
+      << ": key = " << static_cast<uint32_t>(mcu_key.key) << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
@@ -152,10 +164,11 @@ void PrintProtocolData(const int &id, const McuKey_st &mcu_key)
 template <>
 void PrintProtocolData(const int &id, const McuState_st &mcu_state)
 {
+  static TimeImpl time_impl{};
   std::ostringstream oss;
 
-  oss << "[info] " << PrintID(id, "McuState_st") << ": state = " << mcu_state.state
-      << ", error = " << mcu_state.error << std::endl;
+  oss << "[info] " << IdToStr(id, "McuState_st") << ", freq = " << time_impl.GetFreqStr()
+      << ": state = " << mcu_state.state << ", error = " << mcu_state.error << std::endl;
 
   std::cout << oss.str() << std::endl;
 }
