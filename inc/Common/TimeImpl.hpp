@@ -67,6 +67,23 @@ class TimeImpl {
   /**
    * @brief get freq string
    *
+   * @param last_time_ms
+   * @param now_time_ms
+   * @return std::string
+   */
+  std::string GetFreqStr(int64_t last_time_ms, int64_t now_time_ms);
+
+  /**
+   * @brief get freq string
+   *
+   * @param time_ms
+   * @return std::string
+   */
+  std::string GetFreqStr(int64_t time_ms);
+
+  /**
+   * @brief get freq string
+   *
    * @return std::string
    */
   std::string GetFreqStr();

@@ -65,6 +65,20 @@ float TimeImpl::GetFreq()
   return GetFreq(now_time_ms);
 }
 
+std::string TimeImpl::GetFreqStr(int64_t last_time_ms, int64_t now_time_ms)
+{
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2) << GetFreq(last_time_ms, now_time_ms) << "Hz";
+  return oss.str();
+}
+
+std::string TimeImpl::GetFreqStr(int64_t time_ms)
+{
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(2) << GetFreq(time_ms) << "Hz";
+  return oss.str();
+}
+
 std::string TimeImpl::GetFreqStr()
 {
   std::ostringstream oss;
