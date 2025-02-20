@@ -1,7 +1,6 @@
 #include <iostream>
 #include <thread>
 
-#include "Common/Common.hpp"
 #include "roborock.symlink/rda_headers.h"
 #include "Roborock/Roborock.hpp"
 
@@ -31,16 +30,6 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-#if RR_DRV_HW_SERIAL_HALFDUPLEX
-  // 半双工，需要启动线程，用于循环请求数据
-  ret = rua_start_request_rs485();
-  if (ret != 0)
-  {
-    std::cout << "rua_start_request_rs485 failed" << std::endl;
-    return -1;
-  }
-#endif
-
   clean_uart();
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -68,10 +57,6 @@ int main(int argc, char *argv[])
       HandleProtocolData(id, data, data_size);
     }
   }
-
-#if RR_DRV_HW_SERIAL_HALFDUPLEX
-  rua_stop_request_rs485();
-#endif
 
   return 0;
 }
