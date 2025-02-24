@@ -83,7 +83,7 @@ void PrintProtocolData(const int &id, const McuGyroOdo_st &mcu_info)
   // 输出时间戳
   oss << "[info] " << IdToStr(id, "McuGyroOdo_st") << ", frq = " << time_impl.GetFreqStr()
       << ", frq_mcu = " << time_impl_mcu.GetFreqStr(mcu_info.time_stamp)
-      << ((time_impl.GetFreqLast() < 10) ? ", [error]" : ", [ok]") << ": time_stamp = " << mcu_info.time_stamp;
+      << ((time_impl.GetFreqLast() < 1) ? ", [error] frq<1Hz" : ", [ok]") << ": time_stamp = " << mcu_info.time_stamp;
   oss << ", " << ArrToStr(mcu_info.acc, 3, "acc");
   oss << ", " << ArrToStr(mcu_info.gyro, 3, "gyro");
   oss << ", " << ArrToStr(mcu_info.quat, 4, "quat");
